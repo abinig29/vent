@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import User from "../models/user";
-import { CustomError } from "../error/custom";
+import User from "../models/user.js";
+import { CustomError } from "../error/custom.js";
 
-export default authUser = async (req, res, next) => {
+const authUser = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) throw new CustomError("Authentication invalid", 401);
   const token = authorization.split(" ")[1];
@@ -16,3 +16,4 @@ export default authUser = async (req, res, next) => {
     throw new CustomError("Authentication invalid", 401);
   }
 };
+export default authUser;

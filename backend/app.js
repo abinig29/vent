@@ -11,12 +11,12 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import notFound from "./middleware/not_found";
-import errorHandler from "./middleware/error";
+import notFound from "./middleware/not_found.js";
+import errorHandler from "./middleware/error.js";
 import {
   authRouter,
   commnetRouter,
-  userrouter,
+  userRouter,
   ventRouter,
 } from "./routes/index.js";
 const log = console.log;
@@ -63,11 +63,11 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
 //routers
-app.use(authRouter());
-app.use(ventRouter());
-app.use(commnetRouter());
-app.use(userrouter());
-app.use(notFound());
+app.use("/api/v1/auth", authRouter());
+app.use("/api/v1/vent", ventRouter());
+app.use("/api/v1/commnet", commnetRouter());
+app.use("/api/v1/user", userRouter());
+app.use("*", notFound());
 app.use(errorHandler());
 
 const connectAndListen = async () => {
