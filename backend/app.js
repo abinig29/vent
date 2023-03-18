@@ -13,7 +13,12 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import notFound from "./middleware/not_found";
 import errorHandler from "./middleware/error";
-
+import {
+  authRouter,
+  commnetRouter,
+  userrouter,
+  ventRouter,
+} from "./routes/index.js";
 const log = console.log;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,6 +62,11 @@ app.use(morgan("combined", { stream }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
+//routers
+app.use(authRouter());
+app.use(ventRouter());
+app.use(commnetRouter());
+app.use(userrouter());
 app.use(notFound());
 app.use(errorHandler());
 
