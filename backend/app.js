@@ -11,6 +11,8 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import notFound from "./middleware/not_found";
+import errorHandler from "./middleware/error";
 
 const log = console.log;
 const __filename = fileURLToPath(import.meta.url);
@@ -54,6 +56,9 @@ app.use(morgan("combined", { stream }));
 // parse req object make it ease to work with
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
+
+app.use(notFound());
+app.use(errorHandler());
 
 const connectAndListen = async () => {
   try {

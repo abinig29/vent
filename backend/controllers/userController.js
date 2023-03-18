@@ -1,10 +1,10 @@
 import User from "../models/user.js";
 import Vent from "../models/vent.js";
-
+import { CustomError } from "../error/custom.js";
 const getUser = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
-  if (!user) return;
+  if (!user) throw new CustomError("no user is found", 404);
   res.status(200).json({ data: user });
 };
 
@@ -23,7 +23,7 @@ const getUsers = async (req, res) => {
 };
 const editUser = async (req, res) => {
   const { id } = req.params;
-  if (!id == req.user_id) return;
+  if (!id == req.user_id) throw new CustomError("this isnt you ", 401);
   if (req.body.password) {
     const salt = await bcrypt.genSalt(10);
     const hashPass = await bcrypt.hash(req.body.password, salt);
@@ -36,9 +36,11 @@ const editUser = async (req, res) => {
 const saveThought = async (req, res) => {
   const { ventId } = req.body;
   const vent = await Vent.findById(ventId);
-  if (req.user._id == vent.userId) return;
+  if (req.user._id == vent.userId)
+    throw new CustomError("you cant save your own vents ", 400);
   const user = await User.findById(id);
-  if (user.savedThoughts.includes(ventId)) return;
+  if (user.savedThoughts.includes(ventId))
+    throw new CustomError("vent is already in your list", 400);
   await user.updateOne({ $push: { savedThoughts: ventId } });
   res.status(200).json({ data: user });
 };
@@ -47,7 +49,8 @@ const rmSaveThought = async (req, res) => {
   const vent = await Vent.findById(ventId);
   //   if (req.user._id == vent.userId) return;
   const user = await User.findById(id);
-  if (!user.savedThoughts.includes(ventId)) return;
+  if (!user.savedThoughts.includes(ventId))
+    throw new CustomError("vent isnt in your saved list ", 400);
   await user.updateOne({ $pull: { savedThoughts: ventId } });
   res.status(200).json({ data: user });
 };

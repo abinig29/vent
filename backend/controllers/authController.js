@@ -3,11 +3,14 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { CustomError } from "../error/custom.js";
 const signupUser = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!validator.isEmail(email)) return;
-  if (!validator.isStrongPassword(password)) return;
+  if (!validator.isEmail(email))
+    throw new CustomError("enter valid email", 400);
+  if (!validator.isStrongPassword(password))
+    throw new CustomError("your password is week", 400);
   const salt = await bcrypt.genSalt(10);
   const hashedPass = await bcrypt(password, salt);
   const newBody = { ...req.body, password: hashedPass };
@@ -19,9 +22,9 @@ const signupUser = async (req, res) => {
 const loginUser = async () => {
   const { email, password } = req.body;
   const preUser = await User.findOne(email);
-  if (!preUser) return;
+  if (!preUser) throw new CustomError("your email isnt registered", 401);
   const match = await bcrypt.compare(password, preUser.password);
-  if (!match) return;
+  if (!match) throw new CustomError("your password is incorrect", 401);
   const token = jwt.sign(
     { id: preUser._id, name: preUser.userName },
     process.env.KEY
