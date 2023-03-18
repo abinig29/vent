@@ -1,4 +1,5 @@
 import express from "express";
+import authUser from "../middleware/auth.js";
 import {
   getVent,
   getLisetningVent,
@@ -14,15 +15,15 @@ import {
 } from "../controllers/ventController.js";
 const router = express.Router();
 
-router.route("/:id").get(getVent).patch(editVent);
+router.route("/:id").get(getVent).patch(authUser, editVent);
 router.route("/:id/commnet").get(getVentComment);
-router.route("/userVent").get(getUserVent);
-router.route("/").get(getAllVent).post(createVent);
-router.route("/lisetning").get(getLisetningVent);
+router.route("/userVent").get(authUser, getUserVent);
+router.route("/").get(getAllVent).post(authUser, createVent);
+router.route("/lisetning").get(authUser, getLisetningVent);
 
-router.patch("/feelingSame", feelingSame);
-router.patch("/hug", hug);
-router.patch("/smile", smile);
-router.patch("/surprized", surprized);
+router.patch("/feelingSame", authUser, feelingSame);
+router.patch("/hug", authUser, hug);
+router.patch("/smile", authUser, smile);
+router.patch("/surprized", authUser, surprized);
 
 export default router;
