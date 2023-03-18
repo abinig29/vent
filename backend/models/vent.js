@@ -15,6 +15,10 @@ const ventSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    ventText: {
+      type: String,
+      required: true,
+    },
     feelingSame: {
       type: [String],
       default: [],

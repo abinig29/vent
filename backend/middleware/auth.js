@@ -8,8 +8,9 @@ const authUser = async (req, res, next) => {
   if (!authorization) throw new CustomError("Authentication invalid", 401);
   const token = authorization.split(" ")[1];
   try {
-    const { id } = jwt.sign(token, process.env.KEY);
+    const { id } = jwt.verify(token, process.env.KEY);
     const user = await User.findById(id);
+
     user ? (req.user = user) : null;
     next();
   } catch (error) {

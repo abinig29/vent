@@ -13,6 +13,8 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import notFound from "./middleware/not_found.js";
 import errorHandler from "./middleware/error.js";
+// import data from "./data.js";
+// import Vent from "./models/vent.js";
 import {
   authRouter,
   commnetRouter,
@@ -24,26 +26,26 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 mongoose.set("strictQuery", false);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const stream = fs.createWriteStream(path.join(__dirname, "result.log"), {
   flags: "a",
 });
 const url = process.env.URL;
-//config ---------------------------------------
+// //config ---------------------------------------
 
 const app = express();
 
-//static folder setup
-app.use("/images", express.static(path.join(__dirname, "public")));
-// handle  body with json format
+// //static folder setup
+// app.use("/images", express.static(path.join(__dirname, "public")));
+// // handle  body with json format
 app.use(express.json());
 
-//handle req object
+// //handle req object
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-//cross origin resourse origin
+// //cross origin resourse origin
 app.use(cors());
-app.use("*", (req, res) => {
+app.use("*", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -53,16 +55,18 @@ app.use("*", (req, res) => {
     "Access-Control-Allow-Headers",
     "Authorization, Origin, X-Requested-With, Content-Type, Accept"
   );
+  next();
 });
 
-//log file
+// //log file
 app.use(morgan("combined", { stream }));
 
 // parse req object make it ease to work with
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
-//routers
+// //routers
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
 app.use("/api/v1/commnet", commnetRouter);
@@ -76,10 +80,12 @@ const connectAndListen = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    // await Vent.create(data);
     log("db conected");
     app.listen(port, log(`listning through port number${port}`));
   } catch (error) {
     log(error);
   }
 };
+
 connectAndListen();

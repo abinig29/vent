@@ -18,12 +18,13 @@ const getUsers = async (req, res) => {
       }
     : {};
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users = await User.find(keyword);
   res.status(200).json({ data: users });
 };
 const editUser = async (req, res) => {
   const { id } = req.params;
-  if (!id == req.user_id) throw new CustomError("this isnt you ", 401);
+  if (!id == req.user._id.toString())
+    throw new CustomError("this isnt you ", 401);
   if (req.body.password) {
     const salt = await bcrypt.genSalt(10);
     const hashPass = await bcrypt.hash(req.body.password, salt);
@@ -36,9 +37,12 @@ const editUser = async (req, res) => {
 const saveThought = async (req, res) => {
   const { ventId } = req.body;
   const vent = await Vent.findById(ventId);
-  if (req.user._id == vent.userId)
+
+  if (req.user._id.toString() === vent.userId) {
     throw new CustomError("you cant save your own vents ", 400);
-  const user = await User.findById(id);
+  }
+  const user = await User.findById(req.user._id.toString());
+
   if (user.savedThoughts.includes(ventId))
     throw new CustomError("vent is already in your list", 400);
   await user.updateOne({ $push: { savedThoughts: ventId } });
@@ -56,7 +60,7 @@ const rmSaveThought = async (req, res) => {
 };
 
 const getSavedTohughts = async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id.toString());
   const vents = await Promise.all(
     user.savedThoughts.map((ventId) => {
       return Vent.find({ userId: ventId });
