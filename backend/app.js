@@ -13,8 +13,9 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import notFound from "./middleware/not_found.js";
 import errorHandler from "./middleware/error.js";
-// import data from "./data.js";
+import { vent, comment } from "./data.js";
 // import Vent from "./models/vent.js";
+// import Comment from "./models/comment.js";
 import {
   authRouter,
   commnetRouter,
@@ -80,7 +81,8 @@ const connectAndListen = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    // await Vent.create(data);
+    // await Vent.create(vent);
+    // await Comment.create(comment);
     log("db conected");
     app.listen(port, log(`listning through port number${port}`));
   } catch (error) {

@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import Vent from "../models/vent.js";
 import { CustomError } from "../error/custom.js";
+
 const getUser = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
@@ -34,34 +35,6 @@ const editUser = async (req, res) => {
   if (!user) return;
   res.status(200).json({ data: user });
 };
-const saveThought = async (req, res) => {
-  const { ventId } = req.body;
-  const vent = await Vent.findById(ventId);
-  console.log(vent);
-
-  if (req.user._id.toString() === vent.userId) {
-    throw new CustomError("you cant save your own vents ", 400);
-  }
-  let user = await User.findById(req.user._id.toString());
-
-  if (user.savedThoughts.includes(ventId))
-    throw new CustomError("vent is already in your list", 400);
-  await user.updateOne({ $push: { savedThoughts: ventId } });
-  user = await User.findById(req.user._id.toString());
-  res.status(200).json({ data: user });
-};
-const rmSaveThought = async (req, res) => {
-  const { ventId } = req.body;
-  const vent = await Vent.findById(ventId);
-  //   if (req.user._id == vent.userId) return;
-  let user = await User.findById(req.user._id.toString());
-  if (!user.savedThoughts.includes(ventId))
-    throw new CustomError("vent isnt in your saved list ", 400);
-  console.log("A");
-  await user.updateOne({ $pull: { savedThoughts: ventId } });
-  user = await User.findById(req.user._id.toString());
-  res.status(200).json({ data: user });
-};
 
 const getSavedTohughts = async (req, res) => {
   const user = await User.findById(req.user._id.toString());
@@ -92,12 +65,32 @@ const followUnfollowUser = async (req, res) => {
 
   res.status(200).json({ data: user });
 };
+const getUserVent = async (req, res) => {
+  const vent = await Vent.find({ userId: req.params.id });
+  res.status(200).json({ data: vent });
+};
+
+const getLisetningVent = async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  const unorderdVents = await Promise.all(
+    user.lisetning.map((single) => {
+      return Vent.find({ userId: single });
+    })
+  );
+  // console.log(unorderdVents);
+  let orderdVents = [];
+  unorderdVents.forEach((vents) => {
+    orderdVents = [...orderdVents, ...vents];
+  });
+  res.status(200).json({ data: orderdVents });
+};
 export {
   getUser,
   getUsers,
   editUser,
-  saveThought,
-  rmSaveThought,
   getSavedTohughts,
   followUnfollowUser,
+  getLisetningVent,
+  getUserVent,
 };
