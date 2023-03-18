@@ -5,18 +5,18 @@ import {
   getUser,
   getUsers,
   editUser,
-  saveThought,
   getSavedTohughts,
   followUnfollowUser,
-  rmSaveThought,
+  getUserVent,
+  getLisetningVent,
 } from "../controllers/userController.js";
 const router = express.Router();
 
 router.route("/").get(getUsers);
 router.route("/saved").get(authUser, getSavedTohughts);
 router.route("/:id").get(getUser).patch(authUser, editUser);
-router.route("/opration/saveThought").patch(authUser, saveThought);
-router.route("/opration/rmSaveThought").patch(authUser, rmSaveThought);
 router.route("/opration/follow").patch(authUser, followUnfollowUser);
+router.route("/:id/userVent").get(authUser, getUserVent);
+router.route("/:id/lisetning").get(authUser, getLisetningVent);
 
 export default router;
