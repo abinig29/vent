@@ -37,25 +37,29 @@ const editUser = async (req, res) => {
 const saveThought = async (req, res) => {
   const { ventId } = req.body;
   const vent = await Vent.findById(ventId);
+  console.log(vent);
 
   if (req.user._id.toString() === vent.userId) {
     throw new CustomError("you cant save your own vents ", 400);
   }
-  const user = await User.findById(req.user._id.toString());
+  let user = await User.findById(req.user._id.toString());
 
   if (user.savedThoughts.includes(ventId))
     throw new CustomError("vent is already in your list", 400);
   await user.updateOne({ $push: { savedThoughts: ventId } });
+  user = await User.findById(req.user._id.toString());
   res.status(200).json({ data: user });
 };
 const rmSaveThought = async (req, res) => {
   const { ventId } = req.body;
   const vent = await Vent.findById(ventId);
   //   if (req.user._id == vent.userId) return;
-  const user = await User.findById(id);
+  let user = await User.findById(req.user._id.toString());
   if (!user.savedThoughts.includes(ventId))
     throw new CustomError("vent isnt in your saved list ", 400);
+  console.log("A");
   await user.updateOne({ $pull: { savedThoughts: ventId } });
+  user = await User.findById(req.user._id.toString());
   res.status(200).json({ data: user });
 };
 
@@ -63,7 +67,7 @@ const getSavedTohughts = async (req, res) => {
   const user = await User.findById(req.user._id.toString());
   const vents = await Promise.all(
     user.savedThoughts.map((ventId) => {
-      return Vent.find({ userId: ventId });
+      return Vent.find({ _id: ventId });
     })
   );
   res.status(200).json({ data: vents });
@@ -75,13 +79,14 @@ const followUnfollowUser = async (req, res) => {
   const user = await User.findById(id);
   const friend = await User.findById(friendId);
 
-  if (user.friends.includes(friendId)) {
-    user.friends = user.friends.filter((id) => id !== friendId);
-    friend.friends = friend.friends.filter((id) => id !== id);
+  if (user.lisetning.includes(friendId)) {
+    user.lisetning = user.lisetning.filter((id) => id !== friendId);
+    friend.listener = friend.listener.filter((id) => id !== id);
   } else {
-    user.friends.push(friendId);
-    friend.friends.push(id);
+    user.lisetning.push(friendId);
+    friend.listener.push(id);
   }
+
   await user.save();
   await friend.save();
 
