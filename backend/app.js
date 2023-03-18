@@ -63,12 +63,12 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
 //routers
-app.use("/api/v1/auth", authRouter());
-app.use("/api/v1/vent", ventRouter());
-app.use("/api/v1/commnet", commnetRouter());
-app.use("/api/v1/user", userRouter());
-app.use("*", notFound());
-app.use(errorHandler());
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/vent", ventRouter);
+app.use("/api/v1/commnet", commnetRouter);
+app.use("/api/v1/user", userRouter);
+app.use("*", notFound);
+app.use(errorHandler);
 
 const connectAndListen = async () => {
   try {
