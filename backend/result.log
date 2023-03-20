@@ -231,3 +231,4 @@
 ::1 - - [18/Mar/2023:20:25:54 +0000] "GET /api/v1/vent/6415b0d1aef39ae82c93389d HTTP/1.1" 200 333 "-" "PostmanRuntime/7.31.0"
 ::1 - - [18/Mar/2023:20:26:03 +0000] "GET /api/v1/vent/6415b0d1aef39ae82c93389d/commnet HTTP/1.1" 200 524 "-" "PostmanRuntime/7.31.0"
 ::1 - - [18/Mar/2023:20:26:45 +0000] "GET /api/v1/vent/ HTTP/1.1" 200 1997 "-" "PostmanRuntime/7.31.0"
+::1 - - [18/Mar/2023:20:34:03 +0000] "GET /api/v1/user/6415a045d7154777b2bc3121/lisetning HTTP/1.1" 200 712 "-" "PostmanRuntime/7.31.0"

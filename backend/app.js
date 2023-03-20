@@ -41,10 +41,13 @@ const app = express();
 // // handle  body with json format
 app.use(express.json());
 
-// //handle req object
+//handle req object
+
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-// //cross origin resourse origin
+
+//cross origin resourse origin
+
 app.use(cors());
 app.use("*", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -59,14 +62,15 @@ app.use("*", (req, res, next) => {
   next();
 });
 
-// //log file
+//log file
 app.use(morgan("combined", { stream }));
 
 // parse req object make it ease to work with
+
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
-// //routers
+//routers
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
