@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import Nav from "../../component/nav/nav";
+import Posts from "../../component/posts/posts";
 
 const Home = ({ type }) => {
   const [text, setText] = useState("");
@@ -13,18 +15,26 @@ const Home = ({ type }) => {
   }, [type]);
   const StyledBox = styled(Box)({
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
   });
   return (
     <StyledBox>
-      <Box sx={{ paddingX: "10rem", background: "red" }}>
-        {text}
-        sdbvldhsvnkljnklnjbmjknjk kkmmdfsv jhdf
+      <Box
+        sx={{
+          flex: "1.5",
+
+          // bgcolor: "#eceaea",
+        }}
+      >
+        <Nav />
+        <Posts />
       </Box>
-      <Box>
-        <Typography variant="h1" color="initial">
-          Happy
-        </Typography>
+      <Box
+        sx={{
+          flex: "1",
+        }}
+      >
+        T
       </Box>
     </StyledBox>
   );

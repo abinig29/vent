@@ -5,10 +5,12 @@ import SideDrawer from "../drawer/drawer.js";
 
 const Layout = () => {
   return (
-    <Box sx={{ display: "flex", flexDirection: "row" }}>
+    <Box
+      sx={{ display: "flex", flexDirection: "row", backgroundColor: "#f1f1f1" }}
+    >
       <CssBaseline />
       <SideDrawer />
-      <Box sx={{ flex: 1 }}>
+      <Box>
         <Outlet />
       </Box>
     </Box>

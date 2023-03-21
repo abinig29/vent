@@ -26,40 +26,37 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 const list = [
   {
-    icon: <Home color="secondary" sx={{ fontSize: "2rem" }} />,
-    selectedIcon: <HomeOutlined color="secondary" sx={{ fontSize: "2rem" }} />,
+    icon: <Home sx={{ fontSize: "2rem", color: "black" }} />,
+    selectedIcon: <HomeOutlined sx={{ fontSize: "2rem", color: "black" }} />,
     text: "Home",
     location: "/home",
   },
   {
-    icon: <NotificationsActive color="secondary" sx={{ fontSize: "2rem" }} />,
+    icon: <NotificationsActive sx={{ fontSize: "2rem", color: "black" }} />,
     selectedIcon: (
-      <NotificationsActiveOutlined
-        color="secondary"
-        sx={{ fontSize: "2rem" }}
-      />
+      <NotificationsActiveOutlined sx={{ fontSize: "2rem", color: "black" }} />
     ),
     text: "Notification",
     location: "/notification",
   },
   {
-    icon: <ManageAccounts color="secondary" sx={{ fontSize: "2rem" }} />,
+    icon: <ManageAccounts sx={{ fontSize: "2rem", color: "black" }} />,
     selectedIcon: (
-      <ManageAccountsOutlined color="secondary" sx={{ fontSize: "2rem" }} />
+      <ManageAccountsOutlined sx={{ fontSize: "2rem", color: "black" }} />
     ),
     text: "Profile",
     location: "/profile/1234", // location: `/profile/${user._id}`,
   },
   {
-    icon: <Send color="secondary" sx={{ fontSize: "2rem" }} />,
-    selectedIcon: <SendOutlined color="secondary" sx={{ fontSize: "2rem" }} />,
+    icon: <Send sx={{ fontSize: "2rem", color: "black" }} />,
+    selectedIcon: <SendOutlined sx={{ fontSize: "2rem", color: "black" }} />,
     text: "Message",
     location: "/message",
   },
   {
-    icon: <Bookmarks color="secondary" sx={{ fontSize: "2rem" }} />,
+    icon: <Bookmarks sx={{ fontSize: "2rem", color: "black" }} />,
     selectedIcon: (
-      <BookmarksOutlined color="secondary" sx={{ fontSize: "2rem" }} />
+      <BookmarksOutlined sx={{ fontSize: "2rem", color: "black" }} />
     ),
     text: "Saved",
     location: "/saved",
@@ -84,8 +81,9 @@ const SideDrawer = () => {
         "& .MuiDrawer-paper": {
           width: 320,
           boxSizing: "border-box",
-          background: "black",
-          color: "white",
+          // background: "#eceaea",
+          color: "black",
+          border: "1px solid grey",
         },
       }}
     >
@@ -94,7 +92,6 @@ const SideDrawer = () => {
           paddingX: "4rem",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
           gap: "1rem",
         }}
       >
@@ -122,11 +119,11 @@ const SideDrawer = () => {
           />
         </Box>
 
-        {list.map((part) => {
+        {list.map((part, index) => {
           const isSelected = location.pathname === part.location;
 
           return (
-            <ListItem sx={{ padding: "0px" }}>
+            <ListItem sx={{ padding: "0px" }} key={index}>
               <ListItemButton
                 onClick={() => {
                   navigate(part.location, { replace: true });
