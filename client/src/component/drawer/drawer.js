@@ -1,6 +1,6 @@
 import React from "react";
 import Drawer from "@mui/material/Drawer";
-
+import CreateModal from "../createModal/createModal";
 import {
   HomeOutlined,
   Home,
@@ -12,6 +12,7 @@ import {
   NotificationsActiveOutlined,
   Bookmarks,
   BookmarksOutlined,
+  Add,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
@@ -22,6 +23,7 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  Fab,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 const list = [
@@ -66,6 +68,9 @@ const list = [
 const SideDrawer = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   //   const { user } = useSelector((state) => {
   //     state.user;
@@ -118,7 +123,6 @@ const SideDrawer = () => {
             style={{ width: "70px" }}
           />
         </Box>
-
         {list.map((part, index) => {
           const isSelected = location.pathname === part.location;
 
@@ -144,6 +148,19 @@ const SideDrawer = () => {
             </ListItem>
           );
         })}
+        <Box>
+          <Fab
+            color="black"
+            aria-label="add"
+            sx={{ color: "black", mt: 5 }}
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            <Add />
+          </Fab>
+          <CreateModal open={open} handleClose={handleClose} />
+        </Box>
       </List>
     </Drawer>
   );

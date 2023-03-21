@@ -7,7 +7,7 @@ const vent = [
     userName: "abel",
     ventMood: "tired",
     ventText:
-      "First time doing this so bare with me ,This one is something that's been on my mind for a while..for anyone who has been exposed to qorn from a young age and who is addicted...how do y'all keep going in life through the guilt, depression,loss of self esteem etc...and anyone who's no longer addicted. How did you overcome the temptation?",
+      "😘First time doing this so bare with me ,This one is something that's been on my mind for a while..for anyone who has been exposed to qorn from a young age and who is addicted...how do y'all keep going in life through the guilt, depression,loss of self esteem etc...and anyone who's no longer addicted. How did you overcome the temptation?",
     tags: ["afraied"],
     feelingSame: 2,
     hug: 3,

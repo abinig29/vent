@@ -12,6 +12,8 @@ const Nav = () => {
       bgcolor={"white"}
       color={"black"}
       sx={{
+        background: "rgba(255, 255, 255, 0.2)",
+        backdropFilter: "blur(5px)",
         borderLeft: "1px solid white",
         maxWidth: "100%",
         position: "sticky",
