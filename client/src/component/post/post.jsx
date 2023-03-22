@@ -1,4 +1,4 @@
-import { Box, Card, Typography, CardHeader, Avatar, CardContent, CardActions, IconButton, Button, Snackbar, Alert } from '@mui/material'
+import { Box, Card, Typography, CardHeader, Avatar, CardContent, CardActions, IconButton, Button, Snackbar, Alert, Divider } from '@mui/material'
 import React, { useState } from 'react'
 import moment from 'moment'
 
@@ -64,6 +64,7 @@ const Post = ({
                     {ventText}
                 </Typography>
             </CardContent>
+            <Divider />
             <CardActions disableSpacing sx={{ display: "flex", justifyContent: "space-around", width: "75%", }}>
                 <StyledBox >
                     <IconButton aria-label="smile" onClick={() => { setLiked(!liked) }}>
