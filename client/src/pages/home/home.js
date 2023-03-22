@@ -3,7 +3,7 @@ import { Box, Container, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Nav from "../../component/nav/nav";
 import Posts from "../../component/posts/posts";
-
+import RightBar from "../../component/rightBar/rightBar";
 const Home = ({ type }) => {
   const [text, setText] = useState("");
   useEffect(() => {
@@ -19,22 +19,12 @@ const Home = ({ type }) => {
   });
   return (
     <StyledBox>
-      <Box
-        sx={{
-          flex: "1.5",
-
-          // bgcolor: "#eceaea",
-        }}
-      >
+      <Box flex={"1.5"}>
         <Nav />
         <Posts />
       </Box>
-      <Box
-        sx={{
-          flex: "1",
-        }}
-      >
-        T
+      <Box flex={"1"}>
+        <RightBar />
       </Box>
     </StyledBox>
   );

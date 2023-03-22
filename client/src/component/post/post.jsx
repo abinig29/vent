@@ -2,11 +2,12 @@ import { Box, Card, Typography, CardHeader, Avatar, CardContent, CardActions, Ic
 import React, { useState } from 'react'
 import moment from 'moment'
 
-import { MoreVert, Favorite, Share, EmojiEmotionsOutlined, EmojiEmotions, Comment, PushPin } from "@mui/icons-material"
+import { Comment, PushPin } from "@mui/icons-material"
 import { BsFillEmojiSmileFill, BsEmojiSmile } from "react-icons/bs"
 import { FaRegSurprise, FaSurprise } from "react-icons/fa"
-import { color, width } from '@mui/system';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom'
+
 
 
 const Post = ({
@@ -27,6 +28,9 @@ const Post = ({
     const [surprised, setSurprise] = useState(false)
     const [huged, setHug] = useState(false)
     const [save, setSave] = useState(false)
+    const navigate = useNavigate()
+
+
     const handleSnackOpen = () => {
         setSave(true)
         setOpenModal(true)
@@ -90,8 +94,8 @@ const Post = ({
                     </Box>
                     <Typography variant="h6" color="text.secondary" pl={1}>{feelingSame}</Typography>
                 </StyledBox> */}
-                <IconButton aria-label="share">
-                    {<Comment />}
+                <IconButton aria-label="share" >
+                    <Comment onClick={() => { navigate("/vent/123") }} />
                 </IconButton>
                 <Box>
                     <IconButton aria-label="share" onClick={handleSnackOpen} disabled={save} >
