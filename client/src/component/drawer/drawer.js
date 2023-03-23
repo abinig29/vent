@@ -86,7 +86,7 @@ const SideDrawer = () => {
         "& .MuiDrawer-paper": {
           width: 320,
           boxSizing: "border-box",
-          // background: "#eceaea",
+          background: "#ebeaeb",
           color: "black",
           border: "1px solid grey",
         },

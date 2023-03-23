@@ -12,9 +12,10 @@ const Posts = () => {
         display: "flex",
         flexDirection: "column",
         gap: 5,
-        pt: 5,
+        pt: 3,
         px: 8,
       }}
+      flex={1}
     >
       {vent.map(
         ({

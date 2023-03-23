@@ -48,7 +48,7 @@ const SearchUser = () => {
 
     ])
     return (
-        <Box sx={{ position: "relative" }}>
+        <Box sx={{ position: "relative" }} width={"100%"}>
             <Box sx={{ bgcolor: "white", borderRadius: "40px" }} px={2} py={1} >
                 <InputBase placeholder="search user" bgcolor={"transparent"} />
             </Box>

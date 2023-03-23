@@ -36,12 +36,10 @@ const Nav = () => {
           }}
           sx={{
             background:
-              location.pathname === "/home"
-                ? "rgba(233,233,233,0.6)"
-                : "transparent",
+              location.pathname === "/home" ? "#cdbfb6" : "transparent",
             padding: "1rem",
             "&:hover": {
-              background: "rgba(233,233,233,0.6)",
+              background: "#cdbfb6",
             },
           }}
           disableElevation
@@ -62,11 +60,11 @@ const Nav = () => {
           sx={{
             background:
               location.pathname === "/home/listning"
-                ? "rgba(233,233,233,0.6)"
+                ? "#cdbfb6"
                 : "transparent",
             padding: "1rem",
             "&:hover": {
-              background: "rgba(233,233,233,0.6)",
+              background: "#cdbfb6",
             },
           }}
           disableElevation
