@@ -21,7 +21,7 @@ const Home = ({ type }) => {
     <StyledBox>
       <Box flex={"1.5"}>
         <Nav />
-        <Posts />
+        <Posts saved={true} />
       </Box>
       <Box flex={"1"}>
         <RightBar />

@@ -3,7 +3,7 @@ import React from "react";
 import { vent } from "../../data";
 import Post from "../post/post";
 
-const Posts = () => {
+const Posts = ({ saved }) => {
   return (
     <Box
       // bgcolor={"#eceaea"}
@@ -45,6 +45,7 @@ const Posts = () => {
               smile={smile}
               surprized={surprized}
               tags={tags}
+              saved={saved}
             />
           );
         }

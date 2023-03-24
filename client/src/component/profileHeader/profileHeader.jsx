@@ -1,30 +1,24 @@
 import styled from "@emotion/styled"
 import { Box, Avatar, Typography, Stack, Button, Tabs, Tab, Divider } from '@mui/material'
-import { bgcolor } from '@mui/system'
+
 import React from 'react'
-import { useNavigate } from "react-router-dom"
 import EditProfile from "../EditProfile/editProfile.jsx"
 
 const ProfileHeader = () => {
-    const navigate = useNavigate()
 
-    const [value, setValue] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const handleClose = () => {
         setOpen(false)
     }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-        navigate(newValue)
-    };
+
 
 
     const StyledBox = styled(Box)({
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 70
     })
     return (
-        <Box sx={{ display: "flex", justifyContent: "flex-start", width: "100%" }} p={4} >
+        <Box sx={{ display: "flex", justifyContent: "flex-start", width: "100%" }} px={4} py={2} >
             <Stack width={"40%"} pl={3} gap={1} >
                 <Stack flexDirection={"row"} alignItems={"center"} gap={5} >
                     <Avatar
@@ -51,19 +45,7 @@ const ProfileHeader = () => {
                     Ethiopia 💚💛♥️
                 </Typography>
                 <Divider />
-                <Box sx={{ width: '100%' }} >
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        textColor="secondary"
-                        indicatorColor="secondary"
-                        aria-label="secondary tabs example"
-                    >
-                        <Tab value="" label="Vents" />
-                        <Tab value="listner" label="Listener" />
 
-                    </Tabs>
-                </Box>
             </Stack>
         </Box >
 

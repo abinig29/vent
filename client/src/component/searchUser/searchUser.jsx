@@ -52,7 +52,7 @@ const SearchUser = () => {
             <Box sx={{ bgcolor: "white", borderRadius: "40px" }} px={2} py={1} >
                 <InputBase placeholder="search user" bgcolor={"transparent"} />
             </Box>
-            {/* <Box position={"absolute"} width={"100%"}>
+            {/* <Box position={"absolute"} width={"100%"} bgcolor="#f1f2ea" sx={{ zIndex: "5", borderRadius: "20px", boxShadow: "2px 2px 8px rgba(122,122,122,0.8)" }}>
                 <UserList users={users} height={400} />
             </Box> */}
         </Box>

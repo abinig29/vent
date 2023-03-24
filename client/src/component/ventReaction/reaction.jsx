@@ -14,7 +14,8 @@ const Reaction = ({
     surprized,
     postId,
     width,
-    comment }) => {
+    comment,
+    saved }) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [liked, setLiked] = useState(false)
     const [surprised, setSurprise] = useState(false)
@@ -59,15 +60,17 @@ const Reaction = ({
             {comment && <IconButton aria-label="share" >
                 <Comment onClick={() => { navigate(`/vent/${postId}`) }} />
             </IconButton>}
-            <Box>
-                <IconButton aria-label="share" onClick={handleSnackOpen} disabled={save} >
-                    {<PushPin />}
-                </IconButton>
-                <Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
-                    <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
-                        vent saved successfully!
-                    </Alert>
-                </Snackbar>
+            <Box>{
+                saved && (<>
+                    <IconButton aria-label="share" onClick={handleSnackOpen} disabled={save}>
+                        {<PushPin />}
+                    </IconButton><Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
+                            vent saved successfully!
+                        </Alert>
+                    </Snackbar>
+                </>)
+            }
             </Box>
 
         </Stack>

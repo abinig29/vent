@@ -1,9 +1,10 @@
 import React from 'react'
 import { Avatar, ListItem, ListItemIcon, ListItemText, ListItemButton, List, IconButton } from '@mui/material'
-import AddIcon from '@mui/icons-material/Add';
 
 import { Hearing, HearingDisabled } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 const UserList = ({ height, users, rightIcon }) => {
+    const navigate = useNavigate()
     return (
         <List sx={{
 
@@ -15,7 +16,7 @@ const UserList = ({ height, users, rightIcon }) => {
             {users.map((user) => {
                 return (
                     <ListItem disablePadding>
-                        <ListItemButton disableTouchRipple>
+                        <ListItemButton disableTouchRipple onClick={() => navigate(`/profile/1234`)}>
                             <ListItemIcon>
                                 <Avatar src={user.photo}>
                                 </Avatar>

@@ -30,8 +30,8 @@ const App = () => {
             <Route path="notification" element={<Notification />} />
             <Route path="saved" element={<Saved />} />
             <Route path="profile/:id" element={<Profile />}>
-              <Route index element={<Posts />} />
-              <Route path="listner" element={<Posts />} />
+              <Route index element={<Posts saved={false} />} />
+              <Route path="listner" element={<Posts saved={false} />} />
             </Route>
           </Route>
         </Routes>

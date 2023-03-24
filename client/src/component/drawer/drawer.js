@@ -130,7 +130,7 @@ const SideDrawer = () => {
             <ListItem sx={{ padding: "0px" }} key={index}>
               <ListItemButton
                 onClick={() => {
-                  navigate(part.location, { replace: true });
+                  navigate(part.location);
                 }}
               >
                 <ListItemIcon>
