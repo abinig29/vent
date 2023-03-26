@@ -1,9 +1,9 @@
 import { Box } from "@mui/system";
 import React from "react";
-import { vent } from "../../data";
 import Post from "../post/post";
+import Typography from "@mui/material/Typography";
 
-const Posts = ({ saved }) => {
+const Posts = ({ posts }) => {
   return (
     <Box
       // bgcolor={"#eceaea"}
@@ -17,7 +17,7 @@ const Posts = ({ saved }) => {
       }}
       flex={1}
     >
-      {vent.map(
+      {posts.map(
         ({
           _id,
           userId,
@@ -30,6 +30,7 @@ const Posts = ({ saved }) => {
           hug,
           smile,
           surprized,
+          createdAt,
         }) => {
           return (
             <Post
@@ -45,7 +46,8 @@ const Posts = ({ saved }) => {
               smile={smile}
               surprized={surprized}
               tags={tags}
-              saved={saved}
+              saved={true}
+              createdAt={createdAt}
             />
           );
         }
