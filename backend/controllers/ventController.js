@@ -13,12 +13,16 @@ const getVent = async (req, res) => {
 
 const getAllVent = async (req, res) => {
   let query = {};
+
   if (req.query.tags) {
     const tags = req.query.tags.spilt(" ");
     query.tags = { $in: tags };
   }
+  let limit = req.query.limit || 2;
+  let page = req.query.page || 1;
 
-  const vent = await Vent.find(query);
+  const skip = (page - 1) * limit;
+  const vent = await Vent.find(query).limit(limit).skip(skip);
   res.status(200).json({ data: vent });
 };
 

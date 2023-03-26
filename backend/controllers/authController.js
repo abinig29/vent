@@ -8,8 +8,8 @@ const signupUser = async (req, res) => {
   const { email, password } = req.body;
   if (!validator.isEmail(email))
     throw new CustomError("enter valid email", 400);
-  if (!validator.isStrongPassword(password))
-    throw new CustomError("your password is week", 400);
+  // if (!validator.isStrongPassword(password))
+  //   throw new CustomError("your password is week", 400);
   const salt = await bcrypt.genSalt();
 
   const hashedPass = await bcrypt.hash(password, salt);
@@ -21,8 +21,8 @@ const signupUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.log(req.body);
   const { email } = req.body;
-
   let preUser = await User.findOne({ email });
   if (!preUser) throw new CustomError("your email isnt registered", 401);
   const match = await bcrypt.compare(req.body.password, preUser.password);

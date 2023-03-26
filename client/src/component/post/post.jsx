@@ -1,4 +1,4 @@
-import { Box, Card, Typography, CardHeader, Avatar, CardContent, Stack, Divider, Button } from '@mui/material'
+import { Box, Card, Typography, CardHeader, Avatar, CardContent, Stack, Divider, Button, CardMedia, CircularProgress } from '@mui/material'
 import React, { useState } from 'react'
 import moment from 'moment'
 import Reaction from '../ventReaction/reaction'
@@ -14,13 +14,14 @@ const Post = ({
     ventMood,
     ventText,
     tags,
-    feelingSame,
     hug,
     smile,
     surprized,
     createdAt,
-    saved
+    saved,
+
 }) => {
+
     return (
         <Card >
 
@@ -40,6 +41,13 @@ const Post = ({
                 </Button>
 
             </Stack>
+            <CardMedia
+                component="img"
+                height="350"
+                image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0"
+                alt="Paella dish"
+            />
+            {/* <CardMedia title="" image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0" /> */}
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
                     {ventText}
@@ -50,9 +58,9 @@ const Post = ({
                 width={60}
                 comment={true}
                 saved={saved}
-                hug={hug}
-                smile={smile}
-                surprized={surprized}
+                hug={hug.length}
+                smile={smile.length}
+                surprized={surprized.length}
                 postId={_id} />
 
 

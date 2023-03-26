@@ -14,11 +14,14 @@ import Saved from "./pages/saved/saved.js";
 import Layout from "./component/layout/index.js";
 import HomeLayout from "./component/layout/homeLaytout.js";
 import Posts from "./component/posts/posts.js";
+import LoginPage from "./component/login/index.jsx";
 const App = () => {
+  console.log("jjj");
   return (
     <div className="root">
       <Router>
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/home" />} />
             <Route path="home" element={<HomeLayout />}>

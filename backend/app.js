@@ -16,6 +16,7 @@ import errorHandler from "./middleware/error.js";
 import { vent, comment } from "./data.js";
 // import Vent from "./models/vent.js";
 // import Comment from "./models/comment.js";
+import { signupUser } from "./controllers/authController.js";
 import {
   authRouter,
   commnetRouter,
@@ -37,7 +38,7 @@ const url = process.env.URL;
 const app = express();
 
 // //static folder setup
-// app.use("/images", express.static(path.join(__dirname, "public")));
+app.use(express.static("./public"));
 // // handle  body with json format
 app.use(express.json());
 
@@ -71,7 +72,23 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 
 //routers
-
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const isImage = (req, file, callback) => {
+  if (file.mimetype.startsWith("image")) {
+    callback(null, true);
+  } else {
+    callback(null, Error("only image is allowd"));
+  }
+};
+const upload = multer({ storage, fileFilter: isImage });
+app.post("/api/v1/auth/signup", upload.single("picture"), signupUser);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
 app.use("/api/v1/commnet", commnetRouter);

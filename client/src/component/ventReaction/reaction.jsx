@@ -57,8 +57,8 @@ const Reaction = ({
                 </Box>
                 <Typography variant="h6" color="text.secondary" pl={1}>{hug}</Typography>
             </StyledBox>
-            {comment && <IconButton aria-label="share" >
-                <Comment onClick={() => { navigate(`/vent/${postId}`) }} />
+            {comment && <IconButton aria-label="share" onClick={() => { navigate(`/vent/${postId}`) }}>
+                <Comment />
             </IconButton>}
             <Box>{
                 saved && (<>
