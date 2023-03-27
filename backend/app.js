@@ -13,7 +13,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import notFound from "./middleware/not_found.js";
 import errorHandler from "./middleware/error.js";
-import { vent, comment } from "./data.js";
+// import { vent, comment } from "./data.js";
 // import Vent from "./models/vent.js";
 // import Comment from "./models/comment.js";
 import { signupUser } from "./controllers/authController.js";
