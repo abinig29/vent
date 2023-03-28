@@ -65,7 +65,6 @@ const Form = () => {
             dispatch(Login(values))
         }
         onSubmitProps.resetForm();
-
     };
     useEffect(() => {
         if (isRegister) {
