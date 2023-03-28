@@ -1,6 +1,6 @@
 import { Token } from "@mui/icons-material";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { login } from "../api";
+import { saveThought, login, followUnfollow } from "../api";
 import axios from "axios";
 
 const initialState = {
@@ -9,7 +9,11 @@ const initialState = {
   isLoading: true,
   error: false,
 };
-
+let token;
+const preUser = localStorage.getItem("user");
+if (preUser) {
+  token = JSON.parse(preUser).token;
+}
 export const userSlice = createSlice({
   name: "name",
   initialState,
@@ -28,6 +32,13 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.user = user;
       state.Token = token;
+    },
+    setUserOnly: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ user: action.payload, token })
+      );
     },
   },
   extraReducers: (builder) => {
@@ -65,16 +76,7 @@ export const Login = createAsyncThunk(
     try {
       const {
         data: { data },
-      } = await axios.post(
-        "http://localhost:5000/api/v1/auth/login",
-        userInfo,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      // const { data } = await login(userInfo);
+      } = await login(userInfo);
       localStorage.setItem(
         "user",
         JSON.stringify({ user: data.user, token: data.token })
@@ -86,7 +88,31 @@ export const Login = createAsyncThunk(
     }
   }
 );
+export const saveVent = createAsyncThunk(
+  "user/saveVent",
+  async (postId, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await saveThought(postId);
+      dispatch(userSlice.actions.setUserOnly(data));
+      return data;
+    } catch (error) {}
+  }
+);
+export const followUnfollowUser = createAsyncThunk(
+  "user/followUnfollowUser",
+  async (friendId, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await followUnfollow(friendId);
+      dispatch(userSlice.actions.setUserOnly(data));
+      return data;
+    } catch (error) {}
+  }
+);
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setUserOnly } = userSlice.actions;
 
 export default userSlice.reducer;

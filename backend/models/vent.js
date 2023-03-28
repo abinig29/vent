@@ -35,6 +35,10 @@ const ventSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    comment: {
+      type: [String],
+      default: [],
+    },
     tags: {
       type: [String],
     },

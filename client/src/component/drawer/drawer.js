@@ -81,10 +81,10 @@ const SideDrawer = () => {
       variant="permanent"
       anchor="left"
       sx={{
-        width: 320,
+        width: 380,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: 320,
+          width: 380,
           boxSizing: "border-box",
           background: "#ebeaeb",
           color: "black",
@@ -129,6 +129,8 @@ const SideDrawer = () => {
           return (
             <ListItem sx={{ padding: "0px" }} key={index}>
               <ListItemButton
+                disableTouchRipple
+                sx={{ borderRadius: "80px" }}
                 onClick={() => {
                   navigate(part.location);
                 }}
@@ -141,6 +143,7 @@ const SideDrawer = () => {
                   sx={{
                     "& .MuiListItemText-primary": {
                       fontSize: "22px",
+                      fontWeight: isSelected ? "500" : "400",
                     },
                   }}
                 />

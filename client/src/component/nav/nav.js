@@ -21,9 +21,6 @@ const Nav = () => {
         zIndex: "5",
       }}
     >
-      <Typography variant="h5" sx={{ padding: "1rem", fontWeight: "700" }}>
-        Home
-      </Typography>
       <ButtonGroup
         variant="contained"
         fullWidth

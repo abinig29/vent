@@ -91,7 +91,7 @@ const upload = multer({ storage, fileFilter: isImage });
 app.post("/api/v1/auth/signup", upload.single("picture"), signupUser);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
-app.use("/api/v1/commnet", commnetRouter);
+app.use("/api/v1/comment", commnetRouter);
 app.use("/api/v1/user", userRouter);
 app.use("*", notFound);
 app.use(errorHandler);

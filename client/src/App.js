@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "./feature/userSlice.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -16,7 +18,14 @@ import HomeLayout from "./component/layout/homeLaytout.js";
 import Posts from "./component/posts/posts.js";
 import LoginPage from "./component/login/index.jsx";
 const App = () => {
-  console.log("jjj");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const preUser = localStorage.getItem("user");
+    if (preUser) {
+      const { user, token } = JSON.parse(preUser);
+      dispatch(setUser({ token, user }));
+    }
+  }, []);
   return (
     <div className="root">
       <Router>

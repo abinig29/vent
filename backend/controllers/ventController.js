@@ -38,7 +38,7 @@ const editVent = async (req, res) => {
 
 const getVentComment = async (req, res) => {
   const { id } = req.params;
-  const comments = await Comment.find({ ventId: id });
+  const comments = await Comment.find({ ventId: id }).sort("-createdAt");
   res.status(200).json({ data: comments });
 };
 

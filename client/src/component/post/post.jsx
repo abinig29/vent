@@ -1,8 +1,10 @@
-import { Box, Card, Typography, CardHeader, Avatar, CardContent, Stack, Divider, Button, CardMedia, CircularProgress } from '@mui/material'
+import { Card, Typography, Avatar, CardContent, Stack, Divider, Button, CardMedia, Snackbar, Alert } from '@mui/material'
 import React, { useState } from 'react'
 import moment from 'moment'
 import Reaction from '../ventReaction/reaction'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { followUnfollowUser } from '../../feature/userSlice'
 
 
 
@@ -21,6 +23,24 @@ const Post = ({
     saved,
 
 }) => {
+    const { user } = useSelector(state => state.user)
+    const dispacth = useDispatch()
+    const isOurs = user._id === userId
+    const [openModal, setOpenModal] = useState(false)
+    const [listen, setListen] = useState(user.lisetning.includes(userId))
+    const handleClick = () => {
+        dispacth(followUnfollowUser(userId))
+        setOpenModal(true)
+        setListen(pre => !pre)
+
+    }
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenModal(false);
+    };
+
 
     return (
         <Card >
@@ -35,10 +55,18 @@ const Post = ({
                     }}>
                         {`${userName}  is ${ventMood}`} </Typography>
                     <Typography variant="body2" color="text.secondary">{moment(createdAt).fromNow()} </Typography>
-                </Stack>
-                <Button sx={{ ml: "auto" }}>
-                    Listen
-                </Button>
+                </Stack>{
+                    !isOurs &&
+                    (<><Button sx={{ ml: "auto" }} onClick={handleClick}>
+                        {listen ? "Tune out" : "Listen"}
+                    </Button>
+                        <Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
+                            <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
+                                {listen ? `you are now listning to ${userName}` : `you tuned out ${userName}`}
+                            </Alert>
+                        </Snackbar></>
+                    )
+                }
 
             </Stack>
             <CardMedia

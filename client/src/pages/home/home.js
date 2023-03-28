@@ -38,11 +38,8 @@ const Home = ({ type }) => {
 
   return (
     <StyledBox>
-      <Box flex={"1.5"}>
+      <Box flex={"1.2"}>
         <Nav />
-        <Typography variant="h6" color="initial">
-          {posts.length}
-        </Typography>
         <Posts posts={posts} />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {isLoading && <CircularProgress size={100} />}

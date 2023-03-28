@@ -13,7 +13,7 @@ const Posts = ({ posts }) => {
         flexDirection: "column",
         gap: 5,
         pt: 3,
-        px: 8,
+        px: 5,
       }}
       flex={1}
     >

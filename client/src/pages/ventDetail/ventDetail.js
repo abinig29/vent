@@ -4,49 +4,67 @@ import {
   IconButton,
   Avatar,
   Typography,
-  Stack,
   Divider,
   TextField,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "@emotion/styled";
 import Comment from "../../component/Comment/comment";
 import Reaction from "../../component/ventReaction/reaction";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getVent } from "../../feature/ventSlice";
+import { getComment, postComment } from "../../api";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "60vw",
+  height: "80vh",
+  bgcolor: "white",
+  outline: "none",
+};
 
 const VentDetail = () => {
   const navigate = useNavigate();
-  const [post, setPost] = React.useState({
-    _id: "6415b0d1aef39ae82c93389d",
-    userId: "6415a045d7154777b2bc3121",
-    userPicturePath:
-      "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3",
-    userName: "abel",
-    ventMood: "tired",
-    ventText:
-      "😘First time doing this so bare with me ,This one is something that's been on my mind for a while..for anyone who has been exposed to qorn from a young age and who is addicted...how do y'all keep going in life through the guilt, depression,loss of self esteem etc...and anyone who's no longer addicted. How did you overcome the temptation?",
-    tags: ["afraied"],
-    feelingSame: 2,
-    hug: 3,
-    smile: 3,
-    surprized: 7,
-    createdAt: "2023-03-18T12:38:41.848+00:00",
-  });
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { post, reactionLoading } = useSelector((state) => state.vent);
+  const { user } = useSelector((state) => state.user);
   const [open, setOpen] = React.useState(true);
   const [comment, setComment] = React.useState("");
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "50vw",
-    height: "80vh",
-    bgcolor: "white",
-    outline: "none",
-  };
+  const [comments, setComments] = useState([]);
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const {
+          data: { data },
+        } = await getComment(id);
+        setComments(data);
+      } catch (error) {}
+    };
+    fetch();
+    dispatch(getVent(id));
+  }, []);
+  const handlePost = async () => {
+    const {
+      data: { data },
+    } = await postComment({
+      userId: user._id,
+      ventId: id,
+      userPicturePath: user?.coverPhoto,
+      userName: user.userName,
+      comment,
+    });
+    setComments((pre) => [data, ...pre]);
+    setComment("");
+  };
   return (
     <Modal
       open={open}
@@ -58,90 +76,105 @@ const VentDetail = () => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Box maxWidth height={"100%"}>
-          <IconButton
-            aria-label=""
-            onClick={() => {
-              navigate(-1);
-              setOpen(false);
-            }}
-            sx={{
-              position: "absolute",
-              top: "5px",
-              right: "20px",
-              bgcolor: "rgba(233,233,233,0.8)",
-            }}
-          >
-            <Close />
-          </IconButton>
-          <Box height={"100%"} sx={{ display: "flex" }}>
-            <Box height={"100%"} flex={1}>
-              <Reaction
-                width={100}
-                hug={post.hug}
-                smile={post.smile}
-                surprized={post.surprized}
-                postId={post._id}
-              />
-              <Box
-                sx={{
-                  height: "80%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  p: 3,
-                }}
-              >
-                <Typography variant="body2" color="initial">
-                  "Okay so i don't know why I am writing this but am feeling so
-                  sad no one to talk to( even if I want to I don't want to for
-                  some reasons) no one listens no one cares not that anybody
-                  cares. Just learn to standalone when u r sad the ugliest
-                  timing for me tho for this"
-                </Typography>
-              </Box>
-            </Box>
-            <Box
-              flex={1}
-              height={"100%"}
+        {reactionLoading ? (
+          <CircularProgress />
+        ) : (
+          <Box maxWidth height={"100%"}>
+            <IconButton
+              aria-label=""
+              onClick={() => {
+                navigate(-1);
+                setOpen(false);
+              }}
               sx={{
-                borderLeft: "1px solid grey",
+                position: "absolute",
+                top: "5px",
+                right: "20px",
+                bgcolor: "rgba(233,233,233,0.8)",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  p: 1.5,
-                }}
-                flex={1}
-              >
-                <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"></Avatar>
-                <Typography variant="body2" color="text.secondary">
-                  Abel Nigus
-                </Typography>
-              </Box>
-              <Divider />
-              <Comment />
-              <Divider />
-              <Box sx={{ display: "flex" }} p={2} gap={1}>
-                <TextField
-                  id=""
-                  multiline
-                  maxRows={2}
-                  placeholder="write your comment"
-                  value={comment}
-                  onChange={(e) => {
-                    setComment(e.target.value);
-                  }}
-                  style={{ width: "80%" }}
+              <Close />
+            </IconButton>
+            <Box height={"100%"} sx={{ display: "flex" }}>
+              <Box height={"100%"} flex={1.5}>
+                <Reaction
+                  width={100}
+                  hug={post?.hug.length}
+                  smile={post?.smile.length}
+                  surprized={post?.surprized.length}
+                  postId={post._id}
                 />
-                <Button disableTouchRipple>Post</Button>
+                {/* <Divider /> */}
+                <Box
+                  sx={{
+                    height: "80%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    p: 4,
+                  }}
+                >
+                  <Box>
+                    <img
+                      style={{ maxWidth: "100%" }}
+                      src="https://i.ytimg.com/vi/cghJI2kmuCw/maxresdefault.jpg"
+                      alt=""
+                    />
+                  </Box>
+                  <Typography variant="body2" color="initial">
+                    {post?.ventText}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                flex={1}
+                height={"100%"}
+                sx={{
+                  borderLeft: "1px solid grey",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    p: 1.5,
+                  }}
+                  flex={1}
+                >
+                  <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"></Avatar>
+                  <Typography variant="body2" color="text.secondary">
+                    Abel Nigus
+                  </Typography>
+                </Box>
+                <Divider />
+                <Comment comments={comments} />
+                <Divider />
+                <Box sx={{ display: "flex" }} p={2} gap={1}>
+                  <TextField
+                    id=""
+                    multiline
+                    maxRows={2}
+                    placeholder="write your comment"
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                    }}
+                    style={{ width: "80%" }}
+                  />
+                  <Button
+                    disableTouchRipple
+                    onClick={handlePost}
+                    disabled={comment.length === 0}
+                  >
+                    Post
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        )}
       </Box>
     </Modal>
   );

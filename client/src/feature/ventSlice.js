@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getVents } from "../api";
+import { getVents, reactToSingleVent, getSingleVent } from "../api";
+import { setUserOnly } from "./userSlice.js";
 
 const initialState = {
   posts: [],
   isLoading: true,
+  reactionLoading: true,
   post: null,
   error: "",
 };
@@ -16,6 +18,20 @@ export const ventSlice = createSlice({
       state.isLoading = false;
       state.posts = action.payload;
     },
+    setIndvPost: (state, action) => {
+      state.reactionLoading = false;
+      state.post = action.payload;
+    },
+    setPost: (state, action) => {
+      state.isLoading = false;
+      const newPosts = state.posts.map((post) => {
+        if (post._id === action.payload._id) {
+          return action.payload;
+        }
+        return post;
+      });
+      state.posts = newPosts;
+    },
     setPostsPerPage: (state, action) => {
       state.isLoading = false;
       const prePost = state.posts;
@@ -25,6 +41,12 @@ export const ventSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllVents.pending, (state) => {
       state.isLoading = true;
+    });
+    builder.addCase(reactToVent.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getVent.pending, (state) => {
+      state.reactionLoading = true;
     });
     // builder.addCase(getAllVents.fulfilled, (state, action) => {
     //   state.isLoading = false;
@@ -51,6 +73,31 @@ export const getAllVents = createAsyncThunk(
     }
   }
 );
+export const reactToVent = createAsyncThunk(
+  "vent/reactToVent",
+  async ({ postId, mood }, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await reactToSingleVent(postId, mood);
+      dispatch(ventSlice.actions.setPost(data));
+      return data;
+    } catch (error) {}
+  }
+);
+export const getVent = createAsyncThunk(
+  "vent/getVent",
+  async (postId, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await getSingleVent(postId);
+      dispatch(ventSlice.actions.setIndvPost(data));
+      return data;
+    } catch (error) {}
+  }
+);
+
 // export const { reducerName } = ventSlice.actions;
 
 export default ventSlice.reducer;
