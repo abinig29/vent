@@ -30,6 +30,7 @@ const Posts = ({ posts }) => {
           hug,
           smile,
           surprized,
+          comment,
           createdAt,
         }) => {
           return (
@@ -47,6 +48,7 @@ const Posts = ({ posts }) => {
               surprized={surprized}
               tags={tags}
               saved={true}
+              comment={comment}
               createdAt={createdAt}
             />
           );

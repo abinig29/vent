@@ -19,6 +19,9 @@ const ventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ventPhoto: {
+      type: String,
+    },
     feelingSame: {
       type: [String],
       default: [],

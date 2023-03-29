@@ -8,13 +8,18 @@ import Picker from "@emoji-mart/react"
 import Data from "@emoji-mart/data"
 import styled from '@emotion/styled';
 import { emotions } from '../../data';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Dropzone from "react-dropzone";
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { EditOutlined, ArrowBack, Close } from '@mui/icons-material/';
+import { useSelector } from 'react-redux';
+import { createVent } from '../../api';
 
 
 const CreateModal = ({ open, handleClose }) => {
-
+    const { user } = useSelector(state => state.user)
     const [text, setText] = useState("")
     const [mood, setMood] = useState("")
+    const [picture, setPicture] = useState("")
     const [ismoodSelecting, setIsmoodSelecting] = useState(false)
     // const [openEmoji, setOpenEmoji] = useState(false)
 
@@ -22,13 +27,45 @@ const CreateModal = ({ open, handleClose }) => {
         setText(pre => pre + e.native)
         // setOpenEmoji(false)
     }
+    // _id: id[0],
+    //     userId: "6415a045d7154777b2bc3121",
+    //         userPicturePath:
+    // "https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0",
+    //     userName: "abel",
+    //         ventMood: "tired",
+    //             ventText:
+    // "I need to vent Friends with benefits is good right like its ohkay i want that like no sex buh making out and acting like nothing happened thats what we guys want please girls be like this too like mutual sexual support",
+    //     tags: ["afraied"],
+    //         comment: [],
+    const handlePost = async () => {
+        if (text && mood) {
+            try {
+                const formData = new FormData()
+                formData.append("userId", user._id)
+                formData.append("userName", user.userName)
+                formData.append("userPicturePath", "https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0")
+                formData.append("ventMood", mood)
+                formData.append("ventText", text)
+                formData.append("ventPhoto", picture.name)
+                formData.append("picture", picture)
+                const { data: { data } } = await createVent(formData)
+                console.log(data)
+                setMood("")
+                setText("")
+                setPicture("")
+            } catch (error) {
+
+            }
+        }
+
+    }
     const style = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 600,
-        height: (!ismoodSelecting) ? 400 : 600,
+        height: (!ismoodSelecting) ? 500 : 600,
         bgcolor: 'background.paper',
         boxShadow: 24,
         borderRadius: "20px",
@@ -50,7 +87,7 @@ const CreateModal = ({ open, handleClose }) => {
                     <IconButton aria-label="" onClick={() => { handleClose() }} sx={{
                         position: "absolute", top: "5px", right: "20px", bgcolor: "rgba(233,233,233,0.8)"
                     }}>
-                        <CloseIcon />
+                        <Close />
                     </IconButton>
                     <Typography variant="h6" color="initial" align='center' fontWeight={700}>Create Vent</Typography>
                     <Divider />
@@ -63,7 +100,7 @@ const CreateModal = ({ open, handleClose }) => {
                             <Typography variant="body1" color="primary">Mood</Typography>
                         </Button>
                     </CustomBox>
-                    <Box sx={{ display: 'flex', mt: 2, alignItems: "center", flexDirection: "column" }} >
+                    <Box sx={{ display: 'flex', mt: 2, alignItems: "center", flexDirection: "column", }} >
                         <TextField
                             border="none"
                             id="tetx"
@@ -76,7 +113,46 @@ const CreateModal = ({ open, handleClose }) => {
                             sx={{ fontSize: "20px", lineHeight: "15px" }}
                             rows={5}
                         />
-                        <Button variant="contained" fullWidth sx={{ mt: 8 }}>
+                        <Box
+                            border={`1px solid black`}
+                            borderRadius="5px"
+
+                            width={"100%"}
+                            height={"50px"}
+                            mt={2}
+
+                        >
+
+                            <Dropzone
+                                acceptedFiles=".jpg,.jpeg,.png"
+                                multiple={false}
+                                onDrop={(acceptedFiles) =>
+                                    setPicture(acceptedFiles[0])
+                                }
+                            >
+                                {({ getRootProps, getInputProps }) => (
+                                    <Box
+                                        {...getRootProps()}
+                                        // border={`2px dashed ${palette.primary.main}`}
+                                        sx={{ "&:hover": { cursor: "pointer" } }}
+
+                                        height={"100%"}
+                                    >
+                                        <input {...getInputProps()} />
+                                        {!picture ? (
+                                            <p>chooser your  photo</p>
+                                        ) : (
+                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                <Typography>{picture.name}</Typography>
+
+                                                <EditOutlined />
+                                            </Box>
+                                        )}
+                                    </Box>
+                                )}
+                            </Dropzone>
+                        </Box>
+                        <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handlePost}>
                             send post
                         </Button>
 
@@ -94,7 +170,7 @@ const CreateModal = ({ open, handleClose }) => {
                 </Box>) : (<Box flexDirection={"row"} height={"100%"}  >
                     <Box sx={{ p: 2, display: "flex", alignItems: "center", }}>
                         <IconButton aria-label="" onClick={() => { setIsmoodSelecting(false) }}>
-                            <ArrowBackIcon />
+                            <ArrowBack />
                         </IconButton>
                         <Typography variant="body1" color="text.secondary" align="center" mx={2}>Select Your Mood</Typography>
                     </Box>

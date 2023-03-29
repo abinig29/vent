@@ -18,6 +18,7 @@ const Post = ({
     tags,
     hug,
     smile,
+    comment,
     surprized,
     createdAt,
     saved,
@@ -25,9 +26,9 @@ const Post = ({
 }) => {
     const { user } = useSelector(state => state.user)
     const dispacth = useDispatch()
-    const isOurs = user._id === userId
+    const isOurs = user?._id === userId
     const [openModal, setOpenModal] = useState(false)
-    const [listen, setListen] = useState(user.lisetning.includes(userId))
+    const [listen, setListen] = useState(user?.lisetning.includes(userId))
     const handleClick = () => {
         dispacth(followUnfollowUser(userId))
         setOpenModal(true)
@@ -43,7 +44,7 @@ const Post = ({
 
 
     return (
-        <Card >
+        <Card elevation={2} >
 
             <Stack flexDirection={"row"} p={2} >
                 <Avatar aria-label="recipe" src={userPicturePath} />
@@ -81,6 +82,8 @@ const Post = ({
                     {ventText}
                 </Typography>
             </CardContent>
+
+
             <Divider />
             <Reaction
                 width={60}

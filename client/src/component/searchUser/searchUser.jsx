@@ -1,60 +1,37 @@
 import { Box, InputBase, Typography, Avatar, ListItem, ListItemIcon, ListItemText, ListItemButton, List } from '@mui/material'
 import { borderRadius } from '@mui/system'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserList from '../userList/userList'
+import { getUsers } from '../../api'
 
 const SearchUser = () => {
-    const [users, setUsers] = useState([
-        {
-            userName: "abel",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "abel",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "abel",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "abel",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-        {
-            userName: "eden",
-            photo: "https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"
-        },
-
-    ])
+    const [users, setUsers] = useState([])
+    const [search, setSearch] = useState("")
+    useEffect(() => {
+        if (search.length > 0) {
+            const fetch = async () => {
+                try {
+                    const { data: { data } } = await getUsers(search)
+                    setUsers(data)
+                } catch (error) {
+                }
+            }
+            fetch()
+        }
+    }, [search])
     return (
+
         <Box sx={{ position: "relative" }} width={"100%"}>
-            <Box sx={{ bgcolor: "white", borderRadius: "40px" }} px={2} py={1} >
-                <InputBase placeholder="search user" bgcolor={"transparent"} />
+            <Box sx={{ bgcolor: "rgba(111,111,111,0.1)", borderRadius: "40px" }} px={2} py={1} >
+                <InputBase placeholder="search user" onChange={(e) => setSearch(e.target.value)} />
             </Box>
-            {/* <Box position={"absolute"} width={"100%"} bgcolor="#f1f2ea" sx={{ zIndex: "5", borderRadius: "20px", boxShadow: "2px 2px 8px rgba(122,122,122,0.8)" }}>
-                <UserList users={users} height={400} />
-            </Box> */}
+            {
+                search.length ? (<Box position={"absolute"} width={"100%"} bgcolor="rgba(230,230,230,1)" sx={{ zIndex: "5", borderRadius: "20px", boxShadow: "2px 2px 8px rgba(122,122,122,0.8)" }}>
+                    {
+                        users.length ? <UserList users={users} height={400} /> : <Typography variant="body1" color="initial" p={2} height={150}>No user is found</Typography>
+                    }
+                </Box>) : null
+            }
         </Box>
 
     )

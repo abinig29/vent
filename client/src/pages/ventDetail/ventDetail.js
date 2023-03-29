@@ -145,7 +145,7 @@ const VentDetail = () => {
                 >
                   <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"></Avatar>
                   <Typography variant="body2" color="text.secondary">
-                    Abel Nigus
+                    {post.userName}
                   </Typography>
                 </Box>
                 <Divider />

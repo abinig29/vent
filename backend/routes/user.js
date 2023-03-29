@@ -12,7 +12,7 @@ import {
 } from "../controllers/userController.js";
 const router = express.Router();
 
-router.route("/").get(getUsers);
+router.route("/").get(authUser, getUsers);
 router.route("/saved").get(authUser, getSavedTohughts);
 router.route("/:id").get(getUser).patch(authUser, editUser);
 router.route("/opration/follow").patch(authUser, followUnfollowUser);

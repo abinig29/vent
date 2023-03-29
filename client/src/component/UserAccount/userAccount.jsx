@@ -1,9 +1,10 @@
 import styled from '@emotion/styled'
-import { Box, Avatar, Typography, Button } from '@mui/material'
+import { Box, Avatar, Typography, Button, IconButton, Paper } from '@mui/material'
 import { bgcolor } from '@mui/system'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { MdSpatialAudioOff, MdSpatialAudio } from "react-icons/md"
 
 
 const UserAccount = ({
@@ -15,28 +16,34 @@ const UserAccount = ({
 
     })
     const CustomTypo = styled(Typography)({
-        background: "rgba(100, 100, 100, 0.2)",
         backdropFilter: "blur(5px)",
         padding: 10,
-        borderRadius: "50px"
+        borderRadius: "50px",
+        display: "flex",
+        alignItems: "center",
+        gap: "5px"
+
 
     })
 
     return (
-        <CustomBox flexDirection={"column"} gap={2} bgcolor={"white"} p={2} sx={{ boxShadow: " 0 2px 4px rgba(0, 0, 0, 0.1)", borderRadius: 2 }}>
+        <Paper sx={{ borderRadius: 2, p: 2 }} elevation={2}>
             {
                 user ?
-                    (<><CustomBox alignItems={"center"} gap={2}>
-                        {/* <Avatar src={photo}>
-    </Avatar> */}
-                        <CustomBox sx={{ flexDirection: "column", alignItems: "flex-start", }} flex={1}>
-                            <Typography variant="body1" sx={{ color: "black", textTransform: "capitalize" }}>{user.userName}</Typography>
-                            <Typography variant="body1" color="text.secodary">{user.email}</Typography>
-                        </CustomBox>
+                    (<> <Typography variant="body1" color="text.secondary">Your Page and profile</Typography>
+                        <CustomBox alignItems={"center"} gap={1}>
 
-                    </CustomBox><CustomBox justifyContent={"space-around"}>
-                            <CustomTypo variant="body1" sx={{ color: "black" }}>Listener - {user.listener.length}</CustomTypo>
-                            <CustomTypo variant="body1" color="text.secodary">Lisetning - {user.lisetning.length}</CustomTypo>
+                            <CustomBox sx={{ alignItems: "center", }} flex={1} gap={2}>
+                                <IconButton aria-label="" onClick={() => navigate(`/profile/${user._id}`)} sx={{ "&:hover": { bgcolor: "transparent" } }}>
+                                    <Avatar src="https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0" />
+                                </IconButton>
+                                <Typography variant="body1" sx={{ color: "black", textTransform: "capitalize", "&:hover": { textDecoration: "underline", cursor: 'pointer' } }} onClick={() => navigate(`/profile/${user._id}`)}>{user.userName}</Typography>
+                                {/* <Typography variant="body1" color="text.secodary">{user.email}</Typography> */}
+                            </CustomBox>
+
+                        </CustomBox><CustomBox justifyContent={"flex-start"}>
+                            <CustomTypo variant="body1" color="text.secodary"><MdSpatialAudioOff fontSize={"25px"} />  {<Typography variant="h6" color="initial">{user.lisetning.length}</Typography>}</CustomTypo>
+                            <CustomTypo variant="body1" sx={{ color: "black" }}><MdSpatialAudio fontSize={"25px"} />  {<Typography variant="h6" color="initial">{user.listener.length}</Typography>}</CustomTypo>
                         </CustomBox></>) :
                     <Button onClick={() => navigate("/login")} disableRipple variant='contained' sx={{
                         bgcolor: "lightgrey", "&:hover": {
@@ -45,7 +52,7 @@ const UserAccount = ({
                     }}>Login </Button>
 
             }
-        </CustomBox>
+        </Paper>
 
     )
 }

@@ -15,7 +15,7 @@ import {
 } from "../controllers/ventController.js";
 const router = express.Router();
 
-router.route("/").get(getAllVent).post(authUser, createVent);
+router.route("/").get(getAllVent);
 router.route("/:id").get(getVent).patch(authUser, editVent);
 router.route("/:id/comment").get(getVentComment);
 router.patch("/:id/feelingSame", authUser, feelingSame);

@@ -8,7 +8,7 @@ const UserList = ({ height, users, rightIcon }) => {
     return (
         <List sx={{
 
-            height: (height) ? `${height}px` : "auto", bgcolor: "transparent", width: "100%", overflow: (height >= 400) ? "scroll" : "hidden",
+            maxHeight: (height) ? `${height}px` : "auto", bgcolor: "transparent", width: "100%", overflow: (height >= 400) ? "scroll" : "hidden",
             "&::-webkit-scrollbar": {
                 display: "none"
             }

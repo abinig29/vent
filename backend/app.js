@@ -13,16 +13,18 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import notFound from "./middleware/not_found.js";
 import errorHandler from "./middleware/error.js";
-// import { vent, comment } from "./data.js";
-// import Vent from "./models/vent.js";
-// import Comment from "./models/comment.js";
+import { vent, comment } from "./data.js";
+import Vent from "./models/vent.js";
+import Comment from "./models/comment.js";
 import { signupUser } from "./controllers/authController.js";
+import authUser from "./middleware/auth.js";
 import {
   authRouter,
   commnetRouter,
   userRouter,
   ventRouter,
 } from "./routes/index.js";
+import { createVent } from "./controllers/ventController.js";
 const log = console.log;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -89,6 +91,7 @@ const isImage = (req, file, callback) => {
 };
 const upload = multer({ storage, fileFilter: isImage });
 app.post("/api/v1/auth/signup", upload.single("picture"), signupUser);
+app.post("/api/v1/vent", authUser, upload.single("picture"), createVent);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
 app.use("/api/v1/comment", commnetRouter);

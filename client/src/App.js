@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./feature/userSlice.js";
+
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import Home from "./pages/home/home.js";
 import VentDetail from "./pages/ventDetail/ventDetail.js";
@@ -17,6 +19,16 @@ import Layout from "./component/layout/index.js";
 import HomeLayout from "./component/layout/homeLaytout.js";
 import Posts from "./component/posts/posts.js";
 import LoginPage from "./component/login/index.jsx";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -29,6 +41,7 @@ const App = () => {
   return (
     <div className="root">
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Layout />}>

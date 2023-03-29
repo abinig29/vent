@@ -10,12 +10,14 @@ const getUser = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
+  const { _id: userId } = req.user;
   const keyword = req.query.search
     ? {
         $or: [
-          { name: { $regex: req.query.search, $options: "i" } },
+          { userName: { $regex: req.query.search, $options: "i" } },
           { email: { $regex: req.query.search, $options: "i" } },
         ],
+        _id: { $ne: userId.toString() },
       }
     : {};
 
@@ -72,13 +74,11 @@ const getUserVent = async (req, res) => {
 
 const getLisetningVent = async (req, res) => {
   const user = await User.findById(req.params.id);
-
   const unorderdVents = await Promise.all(
     user.lisetning.map((single) => {
       return Vent.find({ userId: single });
     })
   );
-  // console.log(unorderdVents);
   let orderdVents = [];
   unorderdVents.forEach((vents) => {
     orderdVents = [...orderdVents, ...vents];

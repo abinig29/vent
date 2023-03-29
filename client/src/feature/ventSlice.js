@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getVents, reactToSingleVent, getSingleVent } from "../api";
+import {
+  getVents,
+  reactToSingleVent,
+  getSingleVent,
+  getListening,
+} from "../api";
 import { setUserOnly } from "./userSlice.js";
 
 const initialState = {
@@ -47,6 +52,9 @@ export const ventSlice = createSlice({
     });
     builder.addCase(getVent.pending, (state) => {
       state.reactionLoading = true;
+    });
+    builder.addCase(getListeningVents.pending, (state) => {
+      state.isLoading = true;
     });
     // builder.addCase(getAllVents.fulfilled, (state, action) => {
     //   state.isLoading = false;
@@ -97,7 +105,21 @@ export const getVent = createAsyncThunk(
     } catch (error) {}
   }
 );
-
+export const getListeningVents = createAsyncThunk(
+  "vent/getListeningVents",
+  async (li, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await getListening();
+      console.log(data);
+      dispatch(ventSlice.actions.setPosts(data));
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 // export const { reducerName } = ventSlice.actions;
 
 export default ventSlice.reducer;

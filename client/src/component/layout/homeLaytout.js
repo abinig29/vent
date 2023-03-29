@@ -5,7 +5,7 @@ import Nav from "../nav/nav";
 
 const HomeLaytout = () => {
   return (
-    <Box sx={{ bgcolor: "#ebeaeb" }}>
+    <Box sx={{ bgcolor: "white" }}>
       <Outlet />
     </Box>
   );

@@ -1,5 +1,5 @@
 import { Stack } from '@mui/system'
-import { Box, Typography, IconButton, Snackbar, Alert, } from '@mui/material'
+import { Box, Typography, IconButton, Snackbar, Alert, Divider } from '@mui/material'
 import React, { useState } from 'react'
 import { Comment, PushPin } from "@mui/icons-material"
 import { BsFillEmojiSmileFill, BsEmojiSmile } from "react-icons/bs"
@@ -15,7 +15,6 @@ const Reaction = ({
     smile,
     surprized,
     postId,
-    width,
     comment,
     saved }) => {
 
@@ -30,8 +29,8 @@ const Reaction = ({
         surprised: user ? vent?.surprized.includes(user._id) : false,
         huged: user ? vent?.hug.includes(user._id) : false,
     })
-    const save = user.savedThoughts.includes(postId)
-    const [test, setTest] = useState(user.savedThoughts.includes(postId))
+    const save = user?.savedThoughts.includes(postId)
+    const [test, setTest] = useState(user?.savedThoughts.includes(postId))
     // console.log(test, "<--test", "save-->", save, "smiled-->", reaction.smiled)
     const [reactionNumber, setReactionNumber] = React.useState({
         smiled: smile,
@@ -75,6 +74,7 @@ const Reaction = ({
     };
 
     return (
+
         <Stack flexDirection={"row"} justifyContent={"space-around"} width={`${100}%`} py={1}>
             <StyledBox >
                 <IconButton aria-label="smile" onClick={() => handleReaction("smiled")}>
@@ -120,8 +120,8 @@ const Reaction = ({
                 </>)
             }
             </Box>
-
         </Stack >
+
     )
 }
 
