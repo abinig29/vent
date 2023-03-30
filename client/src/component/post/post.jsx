@@ -22,6 +22,7 @@ const Post = ({
     surprized,
     createdAt,
     saved,
+    ventPhoto
 
 }) => {
     const { user } = useSelector(state => state.user)
@@ -73,7 +74,7 @@ const Post = ({
             <CardMedia
                 component="img"
                 height="350"
-                image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0"
+                image={`http://localhost:5000/${ventPhoto}`}
                 alt="Paella dish"
             />
             {/* <CardMedia title="" image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0" /> */}

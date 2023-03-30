@@ -4,6 +4,7 @@ import {
   reactToSingleVent,
   getSingleVent,
   getListening,
+  createVent,
 } from "../api";
 import { setUserOnly } from "./userSlice.js";
 
@@ -26,6 +27,10 @@ export const ventSlice = createSlice({
     setIndvPost: (state, action) => {
       state.reactionLoading = false;
       state.post = action.payload;
+    },
+    createPost: (state, action) => {
+      state.isLoading = false;
+      state.posts = [action.payload, ...state.posts];
     },
     setPost: (state, action) => {
       state.isLoading = false;
@@ -114,6 +119,20 @@ export const getListeningVents = createAsyncThunk(
       } = await getListening();
       console.log(data);
       dispatch(ventSlice.actions.setPosts(data));
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const createSingleVent = createAsyncThunk(
+  "vent/createSingleVent",
+  async (body, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await createVent(body);
+      dispatch(ventSlice.actions.createPost(data));
       return data;
     } catch (error) {
       console.log(error);

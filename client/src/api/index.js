@@ -21,6 +21,13 @@ const API = axios.create({
     "Content-Type": "application/json",
   },
 });
+const PHOTOAPI = axios.create({
+  baseURL: "http://localhost:5000/api/v1",
+  headers: {
+    "Content-Type": "multipart/form-data",
+    Authorization: `Bearer ${token}`,
+  },
+});
 
 export const getVents = (page) => API.get(`/vent?page=${page}`);
 
@@ -44,7 +51,7 @@ export const postComment = (body) => {
   return AUTHAPI.post(`/comment`, body);
 };
 export const createVent = (body) => {
-  return AUTHAPI.post(`/vent`, body);
+  return PHOTOAPI.post(`/vent`, body);
 };
 export const getListening = () => {
   return AUTHAPI.get(`/user/${user._id}/lisetning`);

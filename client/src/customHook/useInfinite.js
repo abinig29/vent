@@ -8,7 +8,7 @@ export const useInfinite = (homePage, setHomePage) => {
     const totalHeight = document.documentElement.scrollHeight;
     const scrollHeight = scrollY + visibleHeight;
 
-    if (scrollHeight + 10 >= totalHeight * 0.6) {
+    if (scrollHeight + 10 >= totalHeight * 0.7) {
       setPage((pre) => pre + 1);
       setHomePage((pre) => pre + 1);
     }

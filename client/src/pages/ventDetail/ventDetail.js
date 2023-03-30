@@ -115,14 +115,14 @@ const VentDetail = () => {
                     p: 4,
                   }}
                 >
-                  <Box>
+                  <Box sx={{ overflow: "hidden" }}>
                     <img
                       style={{ maxWidth: "100%" }}
-                      src="https://i.ytimg.com/vi/cghJI2kmuCw/maxresdefault.jpg"
+                      src={`http://localhost:5000/${post?.ventPhoto}`}
                       alt=""
                     />
                   </Box>
-                  <Typography variant="body2" color="initial">
+                  <Typography variant="body2" color="text.secondary">
                     {post?.ventText}
                   </Typography>
                 </Box>

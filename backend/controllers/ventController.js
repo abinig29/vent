@@ -22,7 +22,10 @@ const getAllVent = async (req, res) => {
   let page = req.query.page || 1;
 
   const skip = (page - 1) * limit;
-  const vent = await Vent.find(query).limit(limit).skip(skip);
+  const vent = await Vent.find(query)
+    .limit(limit)
+    .skip(skip)
+    .sort("-createdAt");
   res.status(200).json({ data: vent });
 };
 

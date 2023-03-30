@@ -32,6 +32,7 @@ const Posts = ({ posts }) => {
           surprized,
           comment,
           createdAt,
+          ventPhoto,
         }) => {
           return (
             <Post
@@ -50,6 +51,7 @@ const Posts = ({ posts }) => {
               saved={true}
               comment={comment}
               createdAt={createdAt}
+              ventPhoto={ventPhoto}
             />
           );
         }

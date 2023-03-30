@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-    Modal, Box, Typography, Divider, IconButton, Avatar, TextField, Button, InputBase, Stack, Grid
+    Modal, Box, Typography, Divider, IconButton, Avatar, TextField, Button, Stack, Grid, Alert, AlertTitle
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Height } from '@mui/icons-material';
@@ -11,16 +11,20 @@ import { emotions } from '../../data';
 import Dropzone from "react-dropzone";
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { EditOutlined, ArrowBack, Close } from '@mui/icons-material/';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createVent } from '../../api';
+import { createSingleVent } from '../../feature/ventSlice';
 
 
 const CreateModal = ({ open, handleClose }) => {
     const { user } = useSelector(state => state.user)
+    const dispatch = useDispatch()
     const [text, setText] = useState("")
     const [mood, setMood] = useState("")
     const [picture, setPicture] = useState("")
     const [ismoodSelecting, setIsmoodSelecting] = useState(false)
+    const [error, setError] = useState({ errText: '', errState: false, errType: "" })
+
     // const [openEmoji, setOpenEmoji] = useState(false)
 
     const handleEmojiClick = (e) => {
@@ -48,8 +52,12 @@ const CreateModal = ({ open, handleClose }) => {
                 formData.append("ventText", text)
                 formData.append("ventPhoto", picture.name)
                 formData.append("picture", picture)
-                const { data: { data } } = await createVent(formData)
-                console.log(data)
+                dispatch(createSingleVent(formData))
+                setError({ errState: true, errType: "success", errText: "vent has been created" })
+                setTimeout(() => {
+                    handleClose()
+                    setError({ errState: false, errType: "", errText: "" })
+                }, 3000)
                 setMood("")
                 setText("")
                 setPicture("")
@@ -89,7 +97,7 @@ const CreateModal = ({ open, handleClose }) => {
                     }}>
                         <Close />
                     </IconButton>
-                    <Typography variant="h6" color="initial" align='center' fontWeight={700}>Create Vent</Typography>
+                    <Typography variant="h6" color="text.secondary" align='center' fontWeight={700}>Create Vent</Typography>
                     <Divider />
                     <CustomBox sx={{ mt: 2, justifyContent: "space-between" }}>
                         <CustomBox>
@@ -155,6 +163,11 @@ const CreateModal = ({ open, handleClose }) => {
                         <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handlePost}>
                             send post
                         </Button>
+                        {
+                            error.errState && <Alert severity={error.errType} sx={{ mt: 2, width: "100%" }}>
+                                <Typography variant="body2" color="" align='center'>{error.errText}</Typography>
+                            </Alert>
+                        }
 
 
                         {/* <IconButton aria-label="" onClick={() => { setOpenEmoji(!openEmoji) }}>
