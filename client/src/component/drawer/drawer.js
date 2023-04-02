@@ -1,6 +1,9 @@
 import React from "react";
 import Drawer from "@mui/material/Drawer";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import PeopleIcon from "@mui/icons-material/People";
 import CreateModal from "../createModal/createModal";
+import { openModal, closeModal } from "../../feature/modalSlice";
 import {
   HomeOutlined,
   Home,
@@ -14,7 +17,7 @@ import {
   BookmarksOutlined,
   Add,
 } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   List,
@@ -26,77 +29,95 @@ import {
   Fab,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-const list = [
-  {
-    icon: <Home sx={{ fontSize: "2rem", color: "black" }} />,
-    selectedIcon: <HomeOutlined sx={{ fontSize: "2rem", color: "black" }} />,
-    text: "Home",
-    location: "/home",
-  },
-  {
-    icon: <NotificationsActive sx={{ fontSize: "2rem", color: "black" }} />,
-    selectedIcon: (
-      <NotificationsActiveOutlined sx={{ fontSize: "2rem", color: "black" }} />
-    ),
-    text: "Notification",
-    location: "/notification",
-  },
-  {
-    icon: <ManageAccounts sx={{ fontSize: "2rem", color: "black" }} />,
-    selectedIcon: (
-      <ManageAccountsOutlined sx={{ fontSize: "2rem", color: "black" }} />
-    ),
-    text: "Profile",
-    location: "/profile/1234", // location: `/profile/${user._id}`,
-  },
-  {
-    icon: <Send sx={{ fontSize: "2rem", color: "black" }} />,
-    selectedIcon: <SendOutlined sx={{ fontSize: "2rem", color: "black" }} />,
-    text: "Message",
-    location: "/message",
-  },
-  {
-    icon: <Bookmarks sx={{ fontSize: "2rem", color: "black" }} />,
-    selectedIcon: (
-      <BookmarksOutlined sx={{ fontSize: "2rem", color: "black" }} />
-    ),
-    text: "Saved",
-    location: "/saved",
-  },
-];
 
 const SideDrawer = () => {
+  const { open } = useSelector((state) => state.modal);
+  console.log(open);
   const location = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { user } = useSelector((state) => state.user);
+  const handleCloseModal = () => {
+    dispatch(closeModal());
+  };
+  const handleOpenModal = () => {
+    dispatch(openModal());
+  };
+  const list = [
+    {
+      selectedIcon: <Home sx={{ fontSize: "2rem", color: "#da254b" }} />,
+      icon: <HomeOutlined sx={{ fontSize: "2rem", color: "black" }} />,
+      text: "For You",
+      location: "/home",
+    },
+    {
+      selectedIcon: <PeopleIcon sx={{ fontSize: "2rem", color: "#da254b" }} />,
+      icon: <PeopleAltOutlinedIcon sx={{ fontSize: "2rem", color: "black" }} />,
+      text: "Listnening",
+      location: "/home/listning",
+    },
+    {
+      selectedIcon: (
+        <NotificationsActive sx={{ fontSize: "2rem", color: "#da254b" }} />
+      ),
+      icon: (
+        <NotificationsActiveOutlined
+          sx={{ fontSize: "2rem", color: "black" }}
+        />
+      ),
+      text: "Notification",
+      location: "/notification",
+    },
+    {
+      selectedIcon: (
+        <ManageAccounts sx={{ fontSize: "2rem", color: "#da254b" }} />
+      ),
+      icon: (
+        <ManageAccountsOutlined sx={{ fontSize: "2rem", color: "black" }} />
+      ),
+      text: "Profile",
+      location: `/profile/${user?._id}`, // location: `/profile/${user._id}`,
+    },
 
-  //   const { user } = useSelector((state) => {
-  //     state.user;
-  //   });
+    {
+      selectedIcon: <Bookmarks sx={{ fontSize: "2rem", color: "black" }} />,
+      icon: <BookmarksOutlined sx={{ fontSize: "2rem", color: "black" }} />,
+      text: "Saved",
+      location: "/saved",
+    },
+  ];
 
   return (
     <Drawer
       variant="permanent"
       anchor="left"
       sx={{
-        width: 380,
+        width: {
+          sm: 220,
+          lg: 280,
+          xl: 310,
+        },
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: 380,
+          width: {
+            sm: 220,
+            lg: 280,
+            xl: 310,
+          },
           boxSizing: "border-box",
           background: "white",
           color: "black",
           borderRight: "1px solid #e8e7e7",
+          px: 5,
         },
       }}
     >
       <List
         sx={{
-          paddingX: "4rem",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           gap: "1rem",
         }}
       >
@@ -127,10 +148,15 @@ const SideDrawer = () => {
           const isSelected = location.pathname === part.location;
 
           return (
-            <ListItem sx={{ padding: "0px" }} key={index}>
+            <ListItem disablePadding key={index}>
               <ListItemButton
                 disableTouchRipple
-                sx={{ borderRadius: "80px" }}
+                sx={{
+                  borderRadius: "80px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: 3,
+                }}
                 onClick={() => {
                   navigate(part.location);
                 }}
@@ -141,6 +167,10 @@ const SideDrawer = () => {
                 <ListItemText
                   primary={part.text}
                   sx={{
+                    display: {
+                      sm: "none",
+                      md: "inline",
+                    },
                     "& .MuiListItemText-primary": {
                       fontSize: "22px",
                       fontWeight: isSelected ? "500" : "400",
@@ -151,18 +181,17 @@ const SideDrawer = () => {
             </ListItem>
           );
         })}
-        <Box>
+        <Box mt={5}>
           <Fab
-            color="black"
             aria-label="add"
-            sx={{ color: "black", mt: 5 }}
+            sx={{ bgcolor: "#da254b", mt: 5 }}
             onClick={() => {
-              handleOpen();
+              handleOpenModal();
             }}
           >
-            <Add />
+            <Add color="" />
           </Fab>
-          <CreateModal open={open} handleClose={handleClose} />
+          <CreateModal open={open} handleClose={handleCloseModal} />
         </Box>
       </List>
     </Drawer>
