@@ -2,6 +2,7 @@ import Vent from "../models/vent.js";
 import User from "../models/user.js";
 import Comment from "../models/comment.js";
 import { CustomError } from "../error/custom.js";
+import { shuffleArray } from "../helperFunctions.js";
 
 const getVent = async (req, res) => {
   const { id } = req.params;
@@ -18,14 +19,11 @@ const getAllVent = async (req, res) => {
     const tags = req.query.tags.spilt(" ");
     query.tags = { $in: tags };
   }
-  let limit = req.query.limit || 2;
+  let limit = req.query.limit || 4;
   let page = req.query.page || 1;
-
   const skip = (page - 1) * limit;
-  const vent = await Vent.find(query)
-    .limit(limit)
-    .skip(skip)
-    .sort("-createdAt");
+  let vent = await Vent.find(query).limit(limit).skip(skip).sort("-createdAt");
+  vent = shuffleArray(vent);
   res.status(200).json({ data: vent });
 };
 

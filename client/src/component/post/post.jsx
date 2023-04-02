@@ -1,11 +1,10 @@
 import { Card, Typography, Avatar, CardContent, Stack, Divider, Button, CardMedia, Snackbar, Alert } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import moment from 'moment'
 import Reaction from '../ventReaction/reaction'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { followUnfollowUser } from '../../feature/userSlice'
-
 
 
 const Post = ({
@@ -21,7 +20,8 @@ const Post = ({
     comment,
     surprized,
     createdAt,
-    saved,
+    savedIcon,
+    listenIcon,
     ventPhoto
 
 }) => {
@@ -29,17 +29,12 @@ const Post = ({
     const dispacth = useDispatch()
     const isOurs = user?._id === userId
     const [openModal, setOpenModal] = useState(false)
-    const [listen, setListen] = useState(user?.lisetning.includes(userId))
+    const listen = user?.lisetning.includes(userId)
     const handleClick = () => {
-        dispacth(followUnfollowUser(userId))
-        setOpenModal(true)
-        setListen(pre => !pre)
 
+        dispacth(followUnfollowUser(userId))
     }
     const handleSnackClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
         setOpenModal(false);
     };
 
@@ -48,21 +43,21 @@ const Post = ({
         <Card elevation={2} >
 
             <Stack flexDirection={"row"} p={2} >
-                <Avatar aria-label="recipe" src={userPicturePath} />
+                <Avatar aria-label="recipe" src={`http://localhost:5000/${userPicturePath}`} />
+
                 <Stack sx={{ ml: 2 }}>
-                    <Typography variant="body2" color="initial" component={Link} to={`/profile/1234`} sx={{
+                    <Typography variant="body2" color="initial" component={Link} to={`/profile/${userId}`} sx={{
                         textDecoration: "none", "&:hover": {
                             textDecoration: "underline"
                         }
                     }}>
                         {`${userName}  is ${ventMood}`} </Typography>
                     <Typography variant="body2" color="text.secondary">{moment(createdAt).fromNow()} </Typography>
-                </Stack>{
-                    !isOurs &&
-                    (<><Button sx={{ ml: "auto" }} onClick={handleClick}>
+                </Stack>{listenIcon && !isOurs &&
+                    (<><Button sx={{ ml: "auto", bgcolor: "#da254b", "&:hover": { bgcolor: "#da254b" } }} disableElevation onClick={handleClick} variant='contained'>
                         {listen ? "Tune out" : "Listen"}
                     </Button>
-                        <Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
+                        <Snackbar open={openModal} onClose={handleSnackClose}>
                             <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
                                 {listen ? `you are now listning to ${userName}` : `you tuned out ${userName}`}
                             </Alert>
@@ -89,7 +84,7 @@ const Post = ({
             <Reaction
                 width={60}
                 comment={true}
-                saved={saved}
+                savedIcon={savedIcon}
                 hug={hug.length}
                 smile={smile.length}
                 surprized={surprized.length}

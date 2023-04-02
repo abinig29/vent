@@ -5,11 +5,17 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { CustomError } from "../error/custom.js";
 const signupUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, userName } = req.body;
   if (!validator.isEmail(email))
     throw new CustomError("enter valid email", 400);
   // if (!validator.isStrongPassword(password))
   //   throw new CustomError("your password is week", 400);
+  let userNameCheck = await User.findOne({ userName });
+  if (userNameCheck) throw new CustomError("user Name is taken", 401);
+  let emailCheck = await User.findOne({ email });
+  if (emailCheck)
+    throw new CustomError("your email is already registered", 401);
+
   const salt = await bcrypt.genSalt();
 
   const hashedPass = await bcrypt.hash(password, salt);
@@ -21,7 +27,6 @@ const signupUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log(req.body);
   const { email } = req.body;
   let preUser = await User.findOne({ email });
   if (!preUser) throw new CustomError("your email isnt registered", 401);

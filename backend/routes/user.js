@@ -9,6 +9,7 @@ import {
   followUnfollowUser,
   getUserVent,
   getLisetningVent,
+  getLisetningUser,
 } from "../controllers/userController.js";
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.route("/:id").get(getUser).patch(authUser, editUser);
 router.route("/opration/follow").patch(authUser, followUnfollowUser);
 router.route("/:id/userVent").get(authUser, getUserVent);
 router.route("/:id/lisetning").get(authUser, getLisetningVent);
+router.route("/:id/lisetnUser").get(authUser, getLisetningUser);
 
 export default router;

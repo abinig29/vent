@@ -2,8 +2,10 @@ import { Box } from "@mui/system";
 import React from "react";
 import Post from "../post/post";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
 
-const Posts = ({ posts }) => {
+const Posts = React.memo(({ listenIcon, savedIcon }) => {
+  const { posts } = useSelector((state) => state.vent);
   return (
     <Box
       // bgcolor={"#eceaea"}
@@ -48,16 +50,17 @@ const Posts = ({ posts }) => {
               smile={smile}
               surprized={surprized}
               tags={tags}
-              saved={true}
+              savedIcon={savedIcon}
               comment={comment}
               createdAt={createdAt}
               ventPhoto={ventPhoto}
+              listenIcon={listenIcon}
             />
           );
         }
       )}
     </Box>
   );
-};
+});
 
 export default Posts;

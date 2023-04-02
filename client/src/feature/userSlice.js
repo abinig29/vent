@@ -1,6 +1,12 @@
 import { Token } from "@mui/icons-material";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { saveThought, login, followUnfollow } from "../api";
+import {
+  saveThought,
+  login,
+  followUnfollow,
+  editUserProfile,
+  editUserProfileWithPhoto,
+} from "../api";
 import axios from "axios";
 
 const initialState = {
@@ -95,6 +101,18 @@ export const saveVent = createAsyncThunk(
       const {
         data: { data },
       } = await saveThought(postId);
+      dispatch(userSlice.actions.setUserOnly(data));
+      return data;
+    } catch (error) {}
+  }
+);
+export const editUser = createAsyncThunk(
+  "user/editUser",
+  async ({ userId, body }, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await editUserProfile({ userId, body });
       dispatch(userSlice.actions.setUserOnly(data));
       return data;
     } catch (error) {}

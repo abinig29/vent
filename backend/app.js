@@ -25,6 +25,7 @@ import {
   ventRouter,
 } from "./routes/index.js";
 import { createVent } from "./controllers/ventController.js";
+import { editUser } from "./controllers/userController.js";
 const log = console.log;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -90,6 +91,7 @@ const isImage = (req, file, callback) => {
   }
 };
 const upload = multer({ storage, fileFilter: isImage });
+app.patch("/api/v1/user/:id", authUser, upload.single("picture"), editUser);
 app.post("/api/v1/auth/signup", upload.single("picture"), signupUser);
 app.post("/api/v1/vent", authUser, upload.single("picture"), createVent);
 app.use("/api/v1/auth", authRouter);

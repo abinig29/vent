@@ -38,6 +38,7 @@ const App = () => {
       dispatch(setUser({ token, user }));
     }
   }, []);
+
   return (
     <div className="root">
       <Router>
@@ -55,8 +56,14 @@ const App = () => {
             <Route path="notification" element={<Notification />} />
             <Route path="saved" element={<Saved />} />
             <Route path="profile/:id" element={<Profile />}>
-              <Route index element={<Posts saved={false} />} />
-              <Route path="listner" element={<Posts saved={false} />} />
+              <Route
+                index
+                element={<Posts listenIcon={false} savedIcon={true} />}
+              />
+              <Route
+                path="reacted"
+                element={<Profile type={"reactedVent"} />}
+              />
             </Route>
           </Route>
         </Routes>

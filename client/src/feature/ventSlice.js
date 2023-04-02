@@ -5,6 +5,7 @@ import {
   getSingleVent,
   getListening,
   createVent,
+  getUserVents,
 } from "../api";
 import { setUserOnly } from "./userSlice.js";
 
@@ -86,6 +87,24 @@ export const getAllVents = createAsyncThunk(
     }
   }
 );
+export const getUserVent = createAsyncThunk(
+  "vent/getUserVent",
+  async ({ page, userId }, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await getUserVents(userId, page);
+      if (page === 1) {
+        dispatch(ventSlice.actions.setPosts(data));
+      } else {
+        dispatch(ventSlice.actions.setPostsPerPage(data));
+      }
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const reactToVent = createAsyncThunk(
   "vent/reactToVent",
   async ({ postId, mood }, { dispatch }) => {
@@ -112,13 +131,16 @@ export const getVent = createAsyncThunk(
 );
 export const getListeningVents = createAsyncThunk(
   "vent/getListeningVents",
-  async (li, { dispatch }) => {
+  async (page, { dispatch }) => {
     try {
       const {
         data: { data },
-      } = await getListening();
-      console.log(data);
-      dispatch(ventSlice.actions.setPosts(data));
+      } = await getListening(page);
+      if (page === 1) {
+        dispatch(ventSlice.actions.setPosts(data));
+      } else {
+        dispatch(ventSlice.actions.setPostsPerPage(data));
+      }
       return data;
     } catch (error) {
       console.log(error);

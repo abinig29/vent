@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import Vent from "../models/vent.js";
 import { CustomError } from "../error/custom.js";
+import { shuffleArray } from "../helperFunctions.js";
 
 const getUser = async (req, res) => {
   const { id } = req.params;
@@ -13,10 +14,7 @@ const getUsers = async (req, res) => {
   const { _id: userId } = req.user;
   const keyword = req.query.search
     ? {
-        $or: [
-          { userName: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
+        $or: [{ userName: { $regex: req.query.search, $options: "i" } }],
         _id: { $ne: userId.toString() },
       }
     : {};
@@ -25,6 +23,7 @@ const getUsers = async (req, res) => {
   res.status(200).json({ data: users });
 };
 const editUser = async (req, res) => {
+  console.log(req.body);
   const { id } = req.params;
   if (!id == req.user._id.toString())
     throw new CustomError("this isnt you ", 401);
@@ -68,7 +67,12 @@ const followUnfollowUser = async (req, res) => {
   res.status(200).json({ data: user });
 };
 const getUserVent = async (req, res) => {
-  const vent = await Vent.find({ userId: req.params.id });
+  let limit = req.query.limit || 2;
+  let page = req.query.page || 1;
+  const skip = (page - 1) * limit;
+  const vent = await Vent.find({ userId: req.params.id })
+    .skip(skip)
+    .limit(limit);
   res.status(200).json({ data: vent });
 };
 
@@ -83,6 +87,30 @@ const getLisetningVent = async (req, res) => {
   unorderdVents.forEach((vents) => {
     orderdVents = [...orderdVents, ...vents];
   });
+  let limit = req.query.limit || 4;
+  let page = req.query.page || 1;
+  const skip = (page - 1) * limit;
+  orderdVents = orderdVents.slice(skip, skip + limit);
+  res.status(200).json({ data: orderdVents });
+};
+const getLisetningUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  let lisetningUser = await Promise.all(
+    user.lisetning.map((single) => {
+      return User.find({ _id: single });
+    })
+  );
+  let resData;
+  if (lisetningUser.length < 5) {
+    resData = lisetningUser;
+  } else {
+    // lisetningUser = shuffleArray(lisetningUser);
+    resData = lisetningUser.slice(0, 5);
+  }
+  let orderdVents = [];
+  resData.forEach((vents) => {
+    orderdVents = [...orderdVents, ...vents];
+  });
   res.status(200).json({ data: orderdVents });
 };
 export {
@@ -93,4 +121,5 @@ export {
   followUnfollowUser,
   getLisetningVent,
   getUserVent,
+  getLisetningUser,
 };

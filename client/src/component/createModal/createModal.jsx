@@ -14,15 +14,18 @@ import { EditOutlined, ArrowBack, Close } from '@mui/icons-material/';
 import { useDispatch, useSelector } from 'react-redux';
 import { createVent } from '../../api';
 import { createSingleVent } from '../../feature/ventSlice';
+import { openMoodModal, closeMoodModal } from '../../feature/modalSlice';
+
 
 
 const CreateModal = ({ open, handleClose }) => {
     const { user } = useSelector(state => state.user)
+    const { ismoodSelecting } = useSelector(state => state.modal)
     const dispatch = useDispatch()
     const [text, setText] = useState("")
     const [mood, setMood] = useState("")
     const [picture, setPicture] = useState("")
-    const [ismoodSelecting, setIsmoodSelecting] = useState(false)
+
     const [error, setError] = useState({ errText: '', errState: false, errType: "" })
 
     // const [openEmoji, setOpenEmoji] = useState(false)
@@ -41,13 +44,19 @@ const CreateModal = ({ open, handleClose }) => {
     // "I need to vent Friends with benefits is good right like its ohkay i want that like no sex buh making out and acting like nothing happened thats what we guys want please girls be like this too like mutual sexual support",
     //     tags: ["afraied"],
     //         comment: [],
+    const closemodal = () => {
+        handleClose()
+        setText("")
+        setMood("")
+        setPicture("")
+    }
     const handlePost = async () => {
         if (text && mood) {
             try {
                 const formData = new FormData()
                 formData.append("userId", user._id)
                 formData.append("userName", user.userName)
-                formData.append("userPicturePath", "https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0")
+                formData.append("userPicturePath", user.coverPhoto)
                 formData.append("ventMood", mood)
                 formData.append("ventText", text)
                 formData.append("ventPhoto", picture.name)
@@ -86,13 +95,13 @@ const CreateModal = ({ open, handleClose }) => {
     return (
         <Modal
             open={open}
-            onClose={handleClose}
+            onClose={closemodal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>{!ismoodSelecting ?
                 (<Box position={"relative"} p={4} >
-                    <IconButton aria-label="" onClick={() => { handleClose() }} sx={{
+                    <IconButton aria-label="" onClick={() => { closemodal() }} sx={{
                         position: "absolute", top: "5px", right: "20px", bgcolor: "rgba(233,233,233,0.8)"
                     }}>
                         <Close />
@@ -104,15 +113,14 @@ const CreateModal = ({ open, handleClose }) => {
                             <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3" alt='Abel' />
                             <Typography variant="h6" color="black" ml={2}>Abel Nigus{mood && `  is ${mood}`}</Typography>
                         </CustomBox>
-                        <Button onClick={() => { setIsmoodSelecting(true) }}>
-                            <Typography variant="body1" color="primary">Mood</Typography>
+                        <Button onClick={() => dispatch(openMoodModal())} variant='contained' sx={{ bgcolor: "#da254b", "&:hover": { bgcolor: "#e35b77" } }} disableElevation >
+                            <Typography variant="body1" color="white">Mood</Typography>
                         </Button>
                     </CustomBox>
                     <Box sx={{ display: 'flex', mt: 2, alignItems: "center", flexDirection: "column", }} >
                         <TextField
                             border="none"
                             id="tetx"
-
                             placeholder='what is in your mind'
                             value={text}
                             onChange={(e) => { setText(e.target.value) }}
@@ -124,13 +132,10 @@ const CreateModal = ({ open, handleClose }) => {
                         <Box
                             border={`1px solid black`}
                             borderRadius="5px"
-
                             width={"100%"}
                             height={"50px"}
                             mt={2}
-
                         >
-
                             <Dropzone
                                 acceptedFiles=".jpg,.jpeg,.png"
                                 multiple={false}
@@ -142,15 +147,14 @@ const CreateModal = ({ open, handleClose }) => {
                                     <Box
                                         {...getRootProps()}
                                         // border={`2px dashed ${palette.primary.main}`}
-                                        sx={{ "&:hover": { cursor: "pointer" } }}
-
+                                        sx={{ "&:hover": { cursor: "pointer" }, display: "flex", alignItems: "center" }}
                                         height={"100%"}
                                     >
                                         <input {...getInputProps()} />
                                         {!picture ? (
-                                            <p>chooser your  photo</p>
+                                            <Typography sx={{ pl: 2 }}>chooser your  photo</Typography>
                                         ) : (
-                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                            <Box flex={1} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 3, height: "100%" }}>
                                                 <Typography>{picture.name}</Typography>
 
                                                 <EditOutlined />
@@ -160,7 +164,7 @@ const CreateModal = ({ open, handleClose }) => {
                                 )}
                             </Dropzone>
                         </Box>
-                        <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handlePost}>
+                        <Button variant="contained" fullWidth sx={{ mt: 2, bgcolor: "#da254b", "&:hover": { bgcolor: "#e35b77" } }} onClick={handlePost}>
                             send post
                         </Button>
                         {
@@ -182,7 +186,7 @@ const CreateModal = ({ open, handleClose }) => {
                     </Box>
                 </Box>) : (<Box flexDirection={"row"} height={"100%"}  >
                     <Box sx={{ p: 2, display: "flex", alignItems: "center", }}>
-                        <IconButton aria-label="" onClick={() => { setIsmoodSelecting(false) }}>
+                        <IconButton aria-label="" onClick={() => { dispatch(closeMoodModal()) }}>
                             <ArrowBack />
                         </IconButton>
                         <Typography variant="body1" color="text.secondary" align="center" mx={2}>Select Your Mood</Typography>
@@ -210,7 +214,7 @@ const CreateModal = ({ open, handleClose }) => {
                                         },
                                     }} onClick={() => {
                                         setMood(emotion.text)
-                                        setIsmoodSelecting(false)
+                                        dispatch(closeMoodModal())
                                     }}>
                                         <Avatar >
                                             {emotion.emoji}
@@ -221,8 +225,9 @@ const CreateModal = ({ open, handleClose }) => {
                             )
                         })}
                     </Grid>
-                </Box>)}
-            </Box>
+                </Box>)
+            }
+            </Box >
         </Modal >
     )
 }

@@ -5,8 +5,9 @@ import { vent } from "../../data";
 
 const Saved = () => {
   return (
-    <Box bgcolor="#ebeaeb">
-      <Posts saved={true} />
+    <Box bgcolor="#ebeaeb" sx={{ display: "flex" }}>
+      <Posts savedIcon={true} />
+      <Box flex={1}></Box>
     </Box>
   );
 };

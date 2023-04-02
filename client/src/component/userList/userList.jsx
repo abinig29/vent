@@ -5,6 +5,7 @@ import { Hearing, HearingDisabled } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 const UserList = ({ height, users, rightIcon }) => {
     const navigate = useNavigate()
+
     return (
         <List sx={{
 
@@ -14,11 +15,12 @@ const UserList = ({ height, users, rightIcon }) => {
             }
         }}>
             {users.map((user) => {
+
                 return (
                     <ListItem disablePadding>
-                        <ListItemButton disableTouchRipple onClick={() => navigate(`/profile/1234`)}>
+                        <ListItemButton disableTouchRipple onClick={() => navigate(`/profile/${user._id}`)}>
                             <ListItemIcon>
-                                <Avatar src={user.photo}>
+                                <Avatar src={`http://localhost:5000/${user.coverPhoto}`} alt={user.userName}>
                                 </Avatar>
                             </ListItemIcon>
                             <ListItemText

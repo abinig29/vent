@@ -1,73 +1,100 @@
-import { BorderLeft } from "@mui/icons-material";
-import { Box, Typography, ButtonGroup, Button, Card } from "@mui/material";
+import { Card, Stack, Avatar, Box, Typography, Divider } from "@mui/material";
 import React from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { HiPhoto } from "react-icons/hi2";
+import { SiKakaotalk } from "react-icons/si";
+import { RiEmotionSadFill } from "react-icons/ri";
+import styled from "@emotion/styled";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal, openMoodAndModal } from "../../feature/modalSlice.js";
 
-const Nav = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
+const CreateNav = ({ user }) => {
+  const dispatch = useDispatch();
+  const handleOpenModal = () => {
+    dispatch(openModal());
+  };
+  const CustomBox = styled(Box)({
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  });
   return (
-    <Card
-      bgcolor={"white"}
-      color={"black"}
-      sx={{
-        background: "rgba(255, 255, 255, 0.2)",
-        backdropFilter: "blur(5px)",
-        borderLeft: "1px solid white",
-        maxWidth: "100%",
-        borderRadius: "0px",
-        position: "sticky",
-        top: "0px",
-        zIndex: "5",
-      }}
-    >
-      <ButtonGroup variant="contained" fullWidth disableElevation>
-        <Button
-          component={Link}
-          to="/home"
+    <Card sx={{ px: 4, py: 2, mt: 3 }}>
+      <Stack flexDirection={"row"} gap={2} alignItems={"center"}>
+        <Avatar src={`http://localhost:5000/${user?.coverPhoto}`}>r</Avatar>
+        <Box
+          onClick={() => handleOpenModal()}
           sx={{
-            background:
-              location.pathname === "/home" ? "#e8e7e7" : "transparent",
-            padding: "1rem",
+            cursor: "pointer",
+            bgcolor: "#f4f2f5",
+            height: "30px",
+            display: "flex",
+            alignItems: "center",
+            flex: 1,
+            borderRadius: 15,
+            p: 3,
+          }}
+        >
+          <Typography variant="body1" color="text.secondary">
+            What is in yout mind
+          </Typography>
+        </Box>
+      </Stack>
+      <Divider sx={{ mt: 2 }} />
+      <Stack flexDirection={"row"} justifyContent={"space-around"} mt={2}>
+        <CustomBox
+          onClick={() => handleOpenModal()}
+          sx={{
+            px: 3,
+            py: 1,
             "&:hover": {
-              background: "#e8e7e7",
+              bgcolor: "#e8fafc",
+              borderRadius: "30px",
+              cursor: "pointer",
             },
           }}
-          disableElevation
-          disableTouchRipple
         >
-          <Typography
-            variant="body1"
-            textTransform={"uppercase"}
-            color={"black"}
-          >
-            For you
+          <HiPhoto fontSize={"30px"} color="#da254b" />
+          <Typography variant="body1" color="text.secondary">
+            Photo
           </Typography>
-        </Button>
-        <Button
-          component={Link}
-          to="/home/listning"
+        </CustomBox>
+        <CustomBox
+          onClick={() => handleOpenModal()}
           sx={{
-            background:
-              location.pathname === "/home/listning"
-                ? "#e8e7e7"
-                : "transparent",
-            padding: "1rem",
+            px: 3,
+            py: 1,
             "&:hover": {
-              background: "#e8e7e7",
+              bgcolor: "#e8fafc",
+              borderRadius: "30px",
+              cursor: "pointer",
             },
           }}
-          disableElevation
-          disableTouchRipple
         >
-          <Typography variant="body1" color={"black"}>
-            Listnening
+          <SiKakaotalk fontSize={"25px"} color="#da254b" />
+          <Typography variant="body1" color="text.secondary">
+            Vent
           </Typography>
-        </Button>
-      </ButtonGroup>
+        </CustomBox>
+        <CustomBox
+          onClick={() => dispatch(openMoodAndModal())}
+          sx={{
+            px: 3,
+            py: 1,
+            "&:hover": {
+              bgcolor: "#e8fafc",
+              borderRadius: "30px",
+              cursor: "pointer",
+            },
+          }}
+        >
+          <RiEmotionSadFill fontSize={"25px"} color="#da254b" />
+          <Typography variant="body1" color="text.secondary">
+            Feeling
+          </Typography>
+        </CustomBox>
+      </Stack>
     </Card>
   );
 };
 
-export default Nav;
+export default CreateNav;
