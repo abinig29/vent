@@ -37,7 +37,7 @@ const UserAccount = ({
 
                         <CustomBox sx={{ alignItems: "center", }} flex={1} gap={2}>
                             <IconButton aria-label="" onClick={() => navigate(`/profile/${user._id}`)} sx={{ "&:hover": { bgcolor: "transparent" } }}>
-                                <Avatar src="https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0" />
+                                <Avatar src={`http://localhost:5000/${user?.coverPhoto}`} />
                             </IconButton>
                             <Typography variant="body1" sx={{ color: "black", textTransform: "capitalize", "&:hover": { textDecoration: "underline", cursor: 'pointer' } }} onClick={() => navigate(`/profile/${user._id}`)}>{user.userName}</Typography>
                             {/* <Typography variant="body1" color="text.secodary">{user.email}</Typography> */}

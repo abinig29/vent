@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./feature/userSlice.js";
 
 import {
@@ -19,6 +19,8 @@ import Layout from "./component/layout/index.js";
 import HomeLayout from "./component/layout/homeLaytout.js";
 import Posts from "./component/posts/posts.js";
 import LoginPage from "./component/login/index.jsx";
+import PostWrapper from "./pages/profile/PostWrapper.jsx";
+import { getNotification } from "./feature/notification.js";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,6 +32,7 @@ function ScrollToTop() {
   return null;
 }
 const App = () => {
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     const preUser = localStorage.getItem("user");
@@ -38,6 +41,9 @@ const App = () => {
       dispatch(setUser({ token, user }));
     }
   }, []);
+  useEffect(() => {
+    dispatch(getNotification());
+  }, [user]);
 
   return (
     <div className="root">
@@ -56,13 +62,11 @@ const App = () => {
             <Route path="notification" element={<Notification />} />
             <Route path="saved" element={<Saved />} />
             <Route path="profile/:id" element={<Profile />}>
-              <Route
-                index
-                element={<Posts listenIcon={false} savedIcon={true} />}
-              />
+              <Route index element={<PostWrapper type={"userVent"} />} />
               <Route
                 path="reacted"
-                element={<Profile type={"reactedVent"} />}
+                element={<PostWrapper type={"reactedVent"} />}
+                // element={}
               />
             </Route>
           </Route>

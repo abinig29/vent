@@ -1,3 +1,8 @@
 /* #root {
   background-color: #eceaea;
 } */
+
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400&display=swap");
+body {
+  font-family: "Comfortaa", cursive;
+}

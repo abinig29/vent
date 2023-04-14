@@ -2,7 +2,8 @@ import Vent from "../models/vent.js";
 import User from "../models/user.js";
 import Comment from "../models/comment.js";
 import { CustomError } from "../error/custom.js";
-import { shuffleArray } from "../helperFunctions.js";
+import { reactToVent, shuffleArray } from "../helperFunctions.js";
+import Notification from "../models/notification.js";
 
 const getVent = async (req, res) => {
   const { id } = req.params;
@@ -47,55 +48,35 @@ const surprized = async (req, res) => {
   const { id } = req.params;
   const { _id: otherId } = req.user;
   let vent = await Vent.findById(id);
+  let curUser = await User.findById(otherId.toString());
   if (!vent) throw new CustomError("no vent is found", 404);
-  if (vent.surprized.includes(otherId.toString())) {
-    await vent.updateOne({ $pull: { surprized: otherId } });
-  } else if (!vent.surprized.includes(otherId.toString())) {
-    await vent.updateOne({ $push: { surprized: otherId } });
-  }
+  await reactToVent(req, vent, curUser, ["surprized", "hug", "smile"]);
   vent = await Vent.findById(id);
-  res.status(201).json({ data: vent });
+  curUser = await User.findById(otherId.toString());
+  res.status(201).json({ data: { vent, curUser } });
 };
 const hug = async (req, res) => {
   const { id } = req.params;
   const { _id: otherId } = req.user;
+  let curUser = await User.findById(otherId.toString());
   let vent = await Vent.findById(id);
   if (!vent) throw new CustomError("no vent is found", 404);
-  if (vent.hug.includes(otherId.toString())) {
-    await vent.updateOne({ $pull: { hug: otherId } });
-  } else if (!vent.hug.includes(otherId.toString())) {
-    await vent.updateOne({ $push: { hug: otherId } });
-  }
+  await reactToVent(req, vent, curUser, ["hug", "surprized", "smile"]);
   vent = await Vent.findById(id);
-  res.status(201).json({ data: vent });
+  curUser = await User.findById(otherId.toString());
+  res.status(201).json({ data: { vent, curUser } });
 };
 
-const feelingSame = async (req, res) => {
-  const { id } = req.params;
-  const { _id: otherId } = req.user;
-  let vent = await Vent.findById(id);
-  if (!vent) throw new CustomError("no vent is found", 404);
-
-  if (vent.feelingSame.includes(otherId.toString())) {
-    await vent.updateOne({ $pull: { feelingSame: otherId.toString() } });
-  } else if (!vent.feelingSame.includes(otherId.toString())) {
-    await vent.updateOne({ $push: { feelingSame: otherId.toString() } });
-  }
-  vent = await Vent.findById(id);
-  res.status(201).json({ data: vent });
-};
 const smile = async (req, res) => {
   const { id } = req.params;
   const { _id: otherId } = req.user;
+  let curUser = await User.findById(otherId.toString());
   let vent = await Vent.findById(id);
   if (!vent) throw new CustomError("no vent is found", 404);
-  if (vent.smile.includes(otherId.toString())) {
-    await vent.updateOne({ $pull: { smile: otherId.toString() } });
-  } else if (!vent.smile.includes(otherId.toString())) {
-    await vent.updateOne({ $push: { smile: otherId.toString() } });
-  }
+  await reactToVent(req, vent, curUser, ["smile", "hug", "surprized"]);
   vent = await Vent.findById(id);
-  res.status(201).json({ data: vent });
+  curUser = await User.findById(otherId.toString());
+  res.status(201).json({ data: { vent, curUser } });
 };
 const saveThought = async (req, res) => {
   const { id } = req.params;
@@ -137,7 +118,6 @@ export {
   surprized,
   smile,
   hug,
-  feelingSame,
   getVentComment,
   saveThought,
   rmSaveThought,

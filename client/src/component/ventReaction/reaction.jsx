@@ -2,14 +2,19 @@ import { Stack } from '@mui/system'
 import { Box, Typography, IconButton, Snackbar, Alert, Divider } from '@mui/material'
 import React, { useState } from 'react'
 import { Comment, PushPin } from "@mui/icons-material"
-import { BsFillEmojiSmileFill, BsEmojiSmile } from "react-icons/bs"
-import { FaCommentDots } from "react-icons/fa"
-import { FaRegSurprise, FaSurprise } from "react-icons/fa"
+import { BiBookmarkHeart } from "react-icons/bi"
+import { FaCommentDots, FaRegMeh } from "react-icons/fa"
+import { FaRegSurprise, FaSurprise, FaRegComments } from "react-icons/fa"
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { reactToVent } from "../../feature/ventSlice"
 import { saveVent } from '../../feature/userSlice'
+import { BiSad, } from "react-icons/bi"
+import { FaLaughBeam } from "react-icons/fa"
+
+
+
 
 const Reaction = ({
     hug,
@@ -79,7 +84,7 @@ const Reaction = ({
         <Stack flexDirection={"row"} justifyContent={"space-around"} width={`${100}%`} py={1}>
             <StyledBox >
                 <IconButton aria-label="smile" onClick={() => handleReaction("smiled")}>
-                    {reaction.smiled ? <BsFillEmojiSmileFill color="#da254b" fontSize={30} /> : <BsEmojiSmile color="#da254b" fontSize={30} />}
+                    {reaction.smiled ? <FaLaughBeam color="#da254b" fontSize={30} /> : <BiSad color="#da254b" fontSize={30} />}
                 </IconButton>
                 <Typography variant="h6" color="text.secondary">{reactionNumber.smiled}</Typography>
                 {/* <Typography variant="h6" color="text.secondary">{smile}</Typography> */}
@@ -87,16 +92,19 @@ const Reaction = ({
             </StyledBox>
             <StyledBox >
                 <IconButton aria-label="share" onClick={() => handleReaction("surprised")}>
-                    {reaction.surprised ? <FaSurprise color="#da254b" fontSize={30} /> : <FaRegSurprise color="#da254b" fontSize={30} />}
+                    {reaction.surprised ? <FaSurprise color="#da254b" fontSize={30} /> : <FaRegMeh color="#da254b" fontSize={30} />}
                 </IconButton>
                 <Typography variant="h6" color="text.secondary">{reactionNumber.surprised}</Typography>
                 {/* <Typography variant="h6" color="text.secondary">{surprized}</Typography> */}
 
             </StyledBox>
+
+
+
             <StyledBox >
-                <Box sx={{ border: "1px solid #da254b", bgcolor: (!reaction.huged) ? "transparent" : "#da254b", p: "2px 8px", borderRadius: 10, cursor: "pointer", }} onClick={() => handleReaction("huged")}>
+                <Box sx={{ border: "1px solid #da254b", bgcolor: (!reaction.huged) ? "transparent" : "#da254b", p: "2px 6px", borderRadius: 10, cursor: "pointer", }} onClick={() => handleReaction("huged")}>
                     {/* <Typography variant="body2" color="initial" sx={{ color: (reaction.huged) ? "white" : "black" }}>Hug</Typography> */}
-                    <Typography variant="body2" color="initial" sx={{ color: (reaction.huged) ? "white" : "black", fontSize: 18 }}>Hug</Typography>
+                    <Typography variant="body2" color="initial" sx={{ color: (reaction.huged) ? "white" : "black", fontSize: 16 }}>Hug</Typography>
 
                 </Box>
                 <Typography variant="h6" color="text.secondary" pl={1}>{reactionNumber.huged}</Typography>
@@ -105,19 +113,19 @@ const Reaction = ({
             </StyledBox>
             {
                 comment && <IconButton aria-label="share" onClick={() => { navigate(`/vent/${postId}`) }}>
-                    <FaCommentDots color="#da254b" fontSize={30} />
+                    <FaRegComments color="#da254b" fontSize={30} />
                 </IconButton>
             }
             <Box>{
                 savedIcon && !isUserVent && (<>
                     <IconButton aria-label="share" onClick={handleSnackOpen} disabled={test}>
-                        {<PushPin />}
+                        {test ? <BiBookmarkHeart color="#f3b8c4" fontSize={30} /> : <BiBookmarkHeart color="#da254b" fontSize={30} />}
                     </IconButton>
-                    <Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
+                    {/* <Snackbar open={openModal} autoHideDuration={6000} onClose={handleSnackClose}>
                         <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
                             vent saved successfully!
                         </Alert>
-                    </Snackbar>
+                    </Snackbar> */}
                 </>)
             }
             </Box>

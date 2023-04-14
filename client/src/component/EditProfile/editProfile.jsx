@@ -14,7 +14,7 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 600,
-    height: 460,
+    height: "auto",
     bgcolor: 'white',
     boxShadow: 24,
     borderRadius: "20px",
@@ -36,9 +36,13 @@ const EditProfile = ({ open, handleClose }) => {
     const intialState = { userName: user?.userName, picture: "", bio: user?.bio }
     const handleSave = (values, onSubmitProps) => {
         const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value])
-        }
+        // for (let value in values) {
+        //     formData.append(value, values[value])
+        // }
+
+        formData.append("userName", values.userName)
+        formData.append("picture", values.picture)
+        formData.append("bio", values.bio)
         if (values.picture)
             formData.append("coverPhoto", values.picture.name);
         dispatch(editUser({ body: formData, userId: user?._id }))
@@ -110,6 +114,8 @@ const EditProfile = ({ open, handleClose }) => {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fullWidth
+                                            multiline
+                                            maxRows={4}
                                             value={values.bio}
                                             name="bio"
                                             error={Boolean(touched.bio) && Boolean(errors.bio)}
@@ -153,9 +159,12 @@ const EditProfile = ({ open, handleClose }) => {
                                 <Button
                                     fullWidth
                                     type="submit"
+                                    variant='contained'
                                     sx={{
+                                        bgcolor: "#da254b",
                                         m: "2rem 0",
                                         p: "1rem",
+                                        "&:hover": { background: "#ec8fa2" }
                                     }}
                                 >
                                     Save

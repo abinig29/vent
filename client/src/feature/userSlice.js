@@ -6,8 +6,10 @@ import {
   followUnfollow,
   editUserProfile,
   editUserProfileWithPhoto,
+  removeSaveThought,
 } from "../api";
 import axios from "axios";
+import { setDeleteVent } from "./ventSlice";
 
 const initialState = {
   user: null,
@@ -15,11 +17,7 @@ const initialState = {
   isLoading: true,
   error: false,
 };
-let token;
-const preUser = localStorage.getItem("user");
-if (preUser) {
-  token = JSON.parse(preUser).token;
-}
+
 export const userSlice = createSlice({
   name: "name",
   initialState,
@@ -41,6 +39,7 @@ export const userSlice = createSlice({
     },
     setUserOnly: (state, action) => {
       state.user = action.payload;
+      const token = state.Token;
       localStorage.setItem(
         "user",
         JSON.stringify({ user: action.payload, token })
@@ -83,6 +82,7 @@ export const Login = createAsyncThunk(
       const {
         data: { data },
       } = await login(userInfo);
+      console.log(data);
       localStorage.setItem(
         "user",
         JSON.stringify({ user: data.user, token: data.token })
@@ -102,6 +102,19 @@ export const saveVent = createAsyncThunk(
         data: { data },
       } = await saveThought(postId);
       dispatch(userSlice.actions.setUserOnly(data));
+      return data;
+    } catch (error) {}
+  }
+);
+export const removeFromSaved = createAsyncThunk(
+  "user/removeFromSaved",
+  async (postId, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await removeSaveThought(postId);
+      dispatch(userSlice.actions.setUserOnly(data));
+      dispatch(setDeleteVent(postId));
       return data;
     } catch (error) {}
   }

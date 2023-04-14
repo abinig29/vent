@@ -143,7 +143,9 @@ const VentDetail = () => {
                   }}
                   flex={1}
                 >
-                  <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3"></Avatar>
+                  <Avatar
+                    src={`http://localhost:5000/${post.userPicturePath}`}
+                  ></Avatar>
                   <Typography variant="body2" color="text.secondary">
                     {post.userName}
                   </Typography>
@@ -167,6 +169,11 @@ const VentDetail = () => {
                     disableTouchRipple
                     onClick={handlePost}
                     disabled={comment.length === 0}
+                    variant="contained"
+                    sx={{
+                      bgcolor: "#da254b",
+                      "&:hover": { background: "#df4263" },
+                    }}
                   >
                     Post
                   </Button>

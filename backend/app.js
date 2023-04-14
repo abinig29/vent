@@ -31,7 +31,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 mongoose.set("strictQuery", false);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 const stream = fs.createWriteStream(path.join(__dirname, "result.log"), {
   flags: "a",
 });
@@ -97,6 +97,7 @@ app.post("/api/v1/vent", authUser, upload.single("picture"), createVent);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/vent", ventRouter);
 app.use("/api/v1/comment", commnetRouter);
+
 app.use("/api/v1/user", userRouter);
 app.use("*", notFound);
 app.use(errorHandler);

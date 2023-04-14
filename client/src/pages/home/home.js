@@ -9,9 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllVents, getListeningVents } from "../../feature/ventSlice";
 import { useInfinite } from "../../customHook/useInfinite";
 import { useNavigate } from "react-router-dom";
-import { getListeningUser } from "../../api";
+import { getListeningUser, getUserList } from "../../api";
 import axios from "axios";
 import SkeletonLoader from "../../component/skeleton/homeSkeleton";
+import { useFetch } from "../../customHook/useFetch";
 
 const Home = ({ type }) => {
   const { posts, isLoading } = useSelector((state) => state.vent);
@@ -20,41 +21,30 @@ const Home = ({ type }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // user we are curently listning to
-  const { user, Token } = useSelector((state) => state.user);
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useSelector((state) => state.user);
+  // const [users, setUsers] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  const { data: users, loading } = useFetch(getUserList, user?._id, [user]);
 
   const dispatch = useDispatch();
   // page realted
-  const [homePage, setHomePage] = useState(1);
-  const { page } = useInfinite(homePage, setHomePage);
-  useEffect(() => {
-    const fetch = async () => {
-      if (Token) {
-        try {
-          const {
-            data: { data },
-          } = await axios.get(
-            `http://localhost:5000/api/v1/user/${user._id}/lisetnUser`,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${Token}`,
-              },
-            }
-          );
-          setLoading(false);
-          setUsers(data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    fetch();
-  }, [user, Token]);
+  const { page } = useInfinite(type);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       const {
+  //         data: { data },
+  //       } = await getUserList(user?._id);
+  //       setLoading(false);
+  //       setUsers(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetch();
+  // }, [user]);
 
   useEffect(() => {
-    setHomePage(1);
     if (type === "all") {
       dispatch(getAllVents(page));
     } else if (type == "listning") {

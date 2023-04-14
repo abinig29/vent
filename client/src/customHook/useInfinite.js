@@ -1,21 +1,21 @@
+import { Try } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
-export const useInfinite = (homePage, setHomePage) => {
-  const [page, setPage] = useState(homePage);
+export const useInfinite = (type) => {
+  const [page, setPage] = useState(1);
   const handleScroll = () => {
     const scrollY = window.scrollY;
     const visibleHeight = document.documentElement.clientHeight;
     const totalHeight = document.documentElement.scrollHeight;
     const scrollHeight = scrollY + visibleHeight;
 
-    if (scrollHeight + 10 >= totalHeight * 0.7) {
+    if (scrollHeight + 3 >= totalHeight * 0.9) {
       setPage((pre) => pre + 1);
-      setHomePage((pre) => pre + 1);
     }
   };
   useEffect(() => {
-    setPage(homePage);
-  }, [homePage]);
+    setPage(1);
+  }, [type]);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {

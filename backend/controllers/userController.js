@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import Vent from "../models/vent.js";
 import { CustomError } from "../error/custom.js";
 import { shuffleArray } from "../helperFunctions.js";
+import Notification from "../models/notification.js";
 
 const getUser = async (req, res) => {
   const { id } = req.params;
@@ -23,7 +24,6 @@ const getUsers = async (req, res) => {
   res.status(200).json({ data: users });
 };
 const editUser = async (req, res) => {
-  console.log(req.body);
   const { id } = req.params;
   if (!id == req.user._id.toString())
     throw new CustomError("this isnt you ", 401);
@@ -39,12 +39,43 @@ const editUser = async (req, res) => {
 
 const getSavedTohughts = async (req, res) => {
   const user = await User.findById(req.user._id.toString());
-  const vents = await Promise.all(
+  const savedVents = await Promise.all(
     user.savedThoughts.map((ventId) => {
       return Vent.find({ _id: ventId });
     })
   );
-  res.status(200).json({ data: vents });
+  let orderdVents = [];
+  savedVents.forEach((vents) => {
+    orderdVents = [...orderdVents, ...vents];
+  });
+  let limit = req.query.limit || 4;
+  let page = req.query.page || 1;
+  const skip = (page - 1) * limit;
+  orderdVents = orderdVents.slice(skip, skip + limit);
+  res.status(200).json({ data: orderdVents });
+};
+const getReactedVents = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!req.params.id === req.user._id) {
+    if (!user.showReactedVents) return new CustomError("hidden by the user");
+  }
+
+  const unorderdVents = await Promise.all(
+    user.reacted.map((single) => {
+      return Vent.find({ _id: single });
+    })
+  );
+
+  let orderdVents = [];
+  unorderdVents.forEach((vents) => {
+    orderdVents = [...orderdVents, ...vents];
+  });
+  orderdVents.reverse();
+  let limit = req.query.limit || 4;
+  let page = req.query.page || 1;
+  const skip = (page - 1) * limit;
+  orderdVents = orderdVents.slice(skip, skip + limit);
+  res.status(200).json({ data: orderdVents });
 };
 
 const followUnfollowUser = async (req, res) => {
@@ -93,6 +124,29 @@ const getLisetningVent = async (req, res) => {
   orderdVents = orderdVents.slice(skip, skip + limit);
   res.status(200).json({ data: orderdVents });
 };
+const getNotification = async (req, res) => {
+  const { _id: id } = req.user;
+  const notifications = await Notification.find({ receiverId: id });
+  const unseenNotifications = await Notification.find({
+    receiverId: id,
+    seen: false,
+  });
+
+  res
+    .status(200)
+    .json({ data: { notifications, unseen: unseenNotifications.length } });
+};
+const seenComment = async (req, res) => {
+  const comment = await Notification.updateMany({
+    receiverId: req.user._id,
+    seen: true,
+  });
+  const newComment = await Notification.find({
+    receiverId: req.user._id,
+  });
+  res.json({ data: { notifications: newComment, unseen: 0 } });
+};
+
 const getLisetningUser = async (req, res) => {
   const user = await User.findById(req.params.id);
   let lisetningUser = await Promise.all(
@@ -122,4 +176,7 @@ export {
   getLisetningVent,
   getUserVent,
   getLisetningUser,
+  getReactedVents,
+  getNotification,
+  seenComment,
 };

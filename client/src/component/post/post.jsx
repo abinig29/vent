@@ -1,10 +1,11 @@
-import { Card, Typography, Avatar, CardContent, Stack, Divider, Button, CardMedia, Snackbar, Alert } from '@mui/material'
+import { Card, Typography, Avatar, CardContent, Stack, Divider, Button, CardMedia, Snackbar, Alert, Menu, MenuItem, IconButton } from '@mui/material'
 import React, { useEffect, useState, useCallback } from 'react'
 import moment from 'moment'
 import Reaction from '../ventReaction/reaction'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { followUnfollowUser } from '../../feature/userSlice'
+import { followUnfollowUser, removeFromSaved } from '../../feature/userSlice'
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 const Post = ({
@@ -22,7 +23,8 @@ const Post = ({
     createdAt,
     savedIcon,
     listenIcon,
-    ventPhoto
+    ventPhoto,
+    rmSaveIcon
 
 }) => {
     const { user } = useSelector(state => state.user)
@@ -31,13 +33,23 @@ const Post = ({
     const [openModal, setOpenModal] = useState(false)
     const listen = user?.lisetning.includes(userId)
     const handleClick = () => {
-
         dispacth(followUnfollowUser(userId))
     }
     const handleSnackClose = (event, reason) => {
         setOpenModal(false);
     };
-
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleMenuCLick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const handleRemove = (postId) => {
+        dispacth(removeFromSaved(postId))
+        handleClose()
+    }
 
     return (
         <Card elevation={2} >
@@ -53,7 +65,8 @@ const Post = ({
                     }}>
                         {`${userName}  is ${ventMood}`} </Typography>
                     <Typography variant="body2" color="text.secondary">{moment(createdAt).fromNow()} </Typography>
-                </Stack>{listenIcon && !isOurs &&
+                </Stack>
+                {listenIcon ? !isOurs &&
                     (<><Button sx={{ ml: "auto", bgcolor: "#da254b", "&:hover": { bgcolor: "#da254b" } }} disableElevation onClick={handleClick} variant='contained'>
                         {listen ? "Tune out" : "Listen"}
                     </Button>
@@ -62,16 +75,41 @@ const Post = ({
                                 {listen ? `you are now listning to ${userName}` : `you tuned out ${userName}`}
                             </Alert>
                         </Snackbar></>
-                    )
+                    ) :
+                    <>
+                        {rmSaveIcon &&
+                            <><IconButton sx={{ ml: "auto" }}
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleMenuCLick}
+                            >
+                                <MoreVertIcon />
+                            </IconButton><Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                    <MenuItem onClick={() => handleRemove(_id)}>Remove from Saved </MenuItem>
+
+                                </Menu></>}</>
                 }
 
             </Stack>
-            <CardMedia
-                component="img"
-                height="350"
-                image={`http://localhost:5000/${ventPhoto}`}
-                alt="Paella dish"
-            />
+            {
+                ventPhoto != "undefined" && <CardMedia
+                    component="img"
+                    height="350"
+                    image={`http://localhost:5000/${ventPhoto}`}
+                    alt="Paella dish"
+                />
+            }
+
             {/* <CardMedia title="" image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0" /> */}
             <CardContent>
                 <Typography variant="body2" color="text.secondary">

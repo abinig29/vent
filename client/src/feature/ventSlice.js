@@ -6,6 +6,8 @@ import {
   getListening,
   createVent,
   getUserVents,
+  getSavedVents,
+  getReactedVent,
 } from "../api";
 import { setUserOnly } from "./userSlice.js";
 
@@ -42,6 +44,10 @@ export const ventSlice = createSlice({
         return post;
       });
       state.posts = newPosts;
+    },
+    setDeleteVent: (state, action) => {
+      const newVents = state.posts.filter((vent) => vent._id != action.payload);
+      state.posts = newVents;
     },
     setPostsPerPage: (state, action) => {
       state.isLoading = false;
@@ -87,6 +93,24 @@ export const getAllVents = createAsyncThunk(
     }
   }
 );
+export const getSavedvent = createAsyncThunk(
+  "vent/getSavedvent",
+  async (page, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await getSavedVents(page);
+      if (page === 1) {
+        dispatch(ventSlice.actions.setPosts(data));
+      } else {
+        dispatch(ventSlice.actions.setPostsPerPage(data));
+      }
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const getUserVent = createAsyncThunk(
   "vent/getUserVent",
   async ({ page, userId }, { dispatch }) => {
@@ -94,6 +118,26 @@ export const getUserVent = createAsyncThunk(
       const {
         data: { data },
       } = await getUserVents(userId, page);
+
+      if (page === 1) {
+        dispatch(ventSlice.actions.setPosts(data));
+      } else {
+        dispatch(ventSlice.actions.setPostsPerPage(data));
+      }
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const getReactedVents = createAsyncThunk(
+  "vent/getReactedVents",
+  async ({ page, userId }, { dispatch }) => {
+    try {
+      const {
+        data: { data },
+      } = await getReactedVent({ userId, page });
+
       if (page === 1) {
         dispatch(ventSlice.actions.setPosts(data));
       } else {
@@ -112,7 +156,9 @@ export const reactToVent = createAsyncThunk(
       const {
         data: { data },
       } = await reactToSingleVent(postId, mood);
-      dispatch(ventSlice.actions.setPost(data));
+      console.log(data);
+      dispatch(ventSlice.actions.setPost(data.vent));
+      dispatch(setUserOnly(data.curUser));
       return data;
     } catch (error) {}
   }
@@ -129,6 +175,7 @@ export const getVent = createAsyncThunk(
     } catch (error) {}
   }
 );
+
 export const getListeningVents = createAsyncThunk(
   "vent/getListeningVents",
   async (page, { dispatch }) => {
@@ -161,6 +208,7 @@ export const createSingleVent = createAsyncThunk(
     }
   }
 );
-// export const { reducerName } = ventSlice.actions;
+
+export const { setDeleteVent } = ventSlice.actions;
 
 export default ventSlice.reducer;

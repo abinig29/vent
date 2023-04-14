@@ -1,0 +1,3 @@
+;/*FB_PKG_DELIM*/
+
+__d("PolarisMorePostsLikeThisHeader.react",["fbt","IGDSBox.react","IGDSText.react","react"],(function(a,b,c,d,e,f,g,h){"use strict";var i=d("react"),j=h._("More posts like this");function a(){return i.jsx(c("IGDSBox.react"),{marginBottom:1,marginStart:4,marginTop:4,children:i.jsx(c("IGDSText.react"),{size:"label",weight:"bold",children:j})})}a.displayName=a.name+" [from "+f.id+"]";g["default"]=a}),98);

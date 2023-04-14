@@ -3,9 +3,16 @@ import { Box, Typography, Avatar, IconButton } from "@mui/material"
 import { Favorite } from "@mui/icons-material"
 
 import moment from "moment"
+import { useNavigate } from 'react-router-dom'
 
 
 const Comment = ({ comments }) => {
+    const navigate = useNavigate()
+
+    const handleClick = (userId) => {
+        navigate(`/profile/${userId}`, { replace: true })
+
+    }
     return (
 
         <Box sx={{
@@ -19,9 +26,9 @@ const Comment = ({ comments }) => {
                     (comments.map((comment) => {
                         return (
                             <Box sx={{ display: 'flex', alignItems: "flex-start" }} gap={2}>
-                                <Avatar src={comment.photo} sx={{ cursor: "pointer" }} />
+                                <Avatar src={`http://localhost:5000/${comment.userPicturePath}`} sx={{ cursor: "pointer" }} />
                                 <Box sx={{ display: 'flex', flexDirection: "column" }} >
-                                    <Typography fontWeight={600} variant="v6" color="black" sx={{ cursor: "pointer", "&:hover": { textDecoration: "underline" } }}>{comment.userName}</Typography>
+                                    <Typography onClick={() => handleClick(comment.userId)} fontWeight={600} variant="v6" color="black" sx={{ cursor: "pointer", "&:hover": { textDecoration: "underline" } }}>{comment.userName}</Typography>
                                     <Typography variant="v6" color="black">{comment.comment}</Typography>
                                     <Typography variant="body2" color="text.secondary">{moment(comment.createdAt).fromNow()}</Typography>
                                 </Box>

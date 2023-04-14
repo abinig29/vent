@@ -27,12 +27,13 @@ import {
   ListItemText,
   Box,
   Fab,
+  Badge,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SideDrawer = () => {
   const { open } = useSelector((state) => state.modal);
-  console.log(open);
+  const { unseen } = useSelector((state) => state.notification);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,9 +62,11 @@ const SideDrawer = () => {
         <NotificationsActive sx={{ fontSize: "2rem", color: "#da254b" }} />
       ),
       icon: (
-        <NotificationsActiveOutlined
-          sx={{ fontSize: "2rem", color: "black" }}
-        />
+        <Badge badgeContent={unseen} color="primary">
+          <NotificationsActiveOutlined
+            sx={{ fontSize: "2rem", color: "black" }}
+          />
+        </Badge>
       ),
       text: "Notification",
       location: "/notification",
@@ -80,7 +83,7 @@ const SideDrawer = () => {
     },
 
     {
-      selectedIcon: <Bookmarks sx={{ fontSize: "2rem", color: "black" }} />,
+      selectedIcon: <Bookmarks sx={{ fontSize: "2rem", color: "#da254b" }} />,
       icon: <BookmarksOutlined sx={{ fontSize: "2rem", color: "black" }} />,
       text: "Saved",
       location: "/saved",
@@ -145,7 +148,14 @@ const SideDrawer = () => {
           />
         </Box>
         {list.map((part, index) => {
-          const isSelected = location.pathname === part.location;
+          let isSelected;
+          if (part.location === `/profile/${user?._id}`) {
+            isSelected =
+              location.pathname === part.location ||
+              location.pathname === `/profile/${user?._id}/reacted`;
+          } else {
+            isSelected = location.pathname === part.location;
+          }
 
           return (
             <ListItem disablePadding key={index}>

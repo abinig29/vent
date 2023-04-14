@@ -30,6 +30,14 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    reacted: {
+      type: [String],
+      default: [],
+    },
+    showReactedVents: {
+      type: Boolean,
+      default: true,
+    },
     savedThoughts: {
       type: [String],
       default: [],
