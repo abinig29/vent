@@ -91,6 +91,7 @@ const isImage = (req, file, callback) => {
   }
 };
 const upload = multer({ storage, fileFilter: isImage });
+app.use("/", (req, res) => res.json({ data: "surprize" }));
 app.patch("/api/v1/user/:id", authUser, upload.single("picture"), editUser);
 app.post("/api/v1/auth/signup", upload.single("picture"), signupUser);
 app.post("/api/v1/vent", authUser, upload.single("picture"), createVent);
