@@ -15,7 +15,7 @@ import SkeletonLoader from "../../component/skeleton/homeSkeleton";
 import { useFetch } from "../../customHook/useFetch";
 
 const Home = ({ type }) => {
-  const { posts, isLoading } = useSelector((state) => state.vent);
+  const { posts, isLoading, doneFetching } = useSelector((state) => state.vent);
   //create modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -31,19 +31,19 @@ const Home = ({ type }) => {
   const { page } = useInfinite(type);
 
   useEffect(() => {
-    if (type === "all") {
+    if (type === "all" && !doneFetching) {
       dispatch(getAllVents(page));
-    } else if (type == "listning") {
+    } else if (type == "listning" && !doneFetching) {
       dispatch(getListeningVents(page));
     }
-  }, [type]);
+  }, [page]);
   useEffect(() => {
     if (type === "all") {
       dispatch(getAllVents(page));
     } else if (type == "listning") {
       dispatch(getListeningVents(page));
     }
-  }, [page]);
+  }, [type]);
   const StyledBox = styled(Box)({
     display: "flex",
     justifyContent: "space-between",
@@ -53,7 +53,6 @@ const Home = ({ type }) => {
     justifyContent: "center",
     alignItems: "center",
   });
-
   return (
     <StyledBox>
       <Box flex={"1.8"} bgcolor="#f3f6f8">

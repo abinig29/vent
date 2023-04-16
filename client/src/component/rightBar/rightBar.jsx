@@ -9,6 +9,8 @@ import UserListSkeleton from '../skeleton/userListSkeleton'
 
 
 const RightBar = ({ users, loading }) => {
+    const { user } = useSelector((state) => state.user);
+
     return (
         <Box width={"100%"} height={"100vh"} >
             <Box position={"fixed"} sx={{ display: "flex", flexDirection: "column", gap: 3, }} height={"100vh"} width={"27%"} px={3} pt={4}>
@@ -21,7 +23,7 @@ const RightBar = ({ users, loading }) => {
                     <Divider />
                     {
                         !loading ?
-                            <UserList users={users} rightIcon={"listen"} /> : <UserListSkeleton />
+                            <UserList users={users} rightIcon={"listen"} /> : user && <UserListSkeleton />
                     }
                 </Paper>
 

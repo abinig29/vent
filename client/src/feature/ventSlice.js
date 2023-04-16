@@ -17,6 +17,7 @@ const initialState = {
   reactionLoading: true,
   post: null,
   error: "",
+  doneFetching: false,
 };
 
 export const ventSlice = createSlice({
@@ -26,6 +27,12 @@ export const ventSlice = createSlice({
     setPosts: (state, action) => {
       state.isLoading = false;
       state.posts = action.payload;
+    },
+    setPostsNull: (state, action) => {
+      state.posts = [];
+    },
+    setDonefetching: (state, action) => {
+      state.doneFetching = action.payload;
     },
     setIndvPost: (state, action) => {
       state.reactionLoading = false;
@@ -68,6 +75,15 @@ export const ventSlice = createSlice({
     builder.addCase(getListeningVents.pending, (state) => {
       state.isLoading = true;
     });
+    builder.addCase(getUserVent.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getReactedVents.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getSavedvent.pending, (state) => {
+      state.isLoading = true;
+    });
     // builder.addCase(getAllVents.fulfilled, (state, action) => {
     //   state.isLoading = false;
     //   state.posts = action.payload;
@@ -78,6 +94,8 @@ export const ventSlice = createSlice({
 export const getAllVents = createAsyncThunk(
   "vent/getAllVents",
   async (page, { dispatch }) => {
+    dispatch(ventSlice.actions.setDonefetching(false));
+    page === 1 && dispatch(ventSlice.actions.setPostsNull());
     try {
       const {
         data: { data },
@@ -87,6 +105,7 @@ export const getAllVents = createAsyncThunk(
       } else {
         dispatch(ventSlice.actions.setPostsPerPage(data));
       }
+      if (data.length === 0) dispatch(ventSlice.actions.setDonefetching(true));
       return data;
     } catch (error) {
       console.log(error);
@@ -96,6 +115,9 @@ export const getAllVents = createAsyncThunk(
 export const getSavedvent = createAsyncThunk(
   "vent/getSavedvent",
   async (page, { dispatch }) => {
+    page === 1 && dispatch(ventSlice.actions.setPostsNull());
+    dispatch(ventSlice.actions.setDonefetching(false));
+
     try {
       const {
         data: { data },
@@ -105,6 +127,8 @@ export const getSavedvent = createAsyncThunk(
       } else {
         dispatch(ventSlice.actions.setPostsPerPage(data));
       }
+      if (data.length === 0) dispatch(ventSlice.actions.setDonefetching(true));
+
       return data;
     } catch (error) {
       console.log(error);
@@ -114,6 +138,8 @@ export const getSavedvent = createAsyncThunk(
 export const getUserVent = createAsyncThunk(
   "vent/getUserVent",
   async ({ page, userId }, { dispatch }) => {
+    page === 1 && dispatch(ventSlice.actions.setPostsNull());
+    dispatch(ventSlice.actions.setDonefetching(false));
     try {
       const {
         data: { data },
@@ -124,6 +150,7 @@ export const getUserVent = createAsyncThunk(
       } else {
         dispatch(ventSlice.actions.setPostsPerPage(data));
       }
+      if (data.length === 0) dispatch(ventSlice.actions.setDonefetching(true));
       return data;
     } catch (error) {
       console.log(error);
@@ -133,6 +160,9 @@ export const getUserVent = createAsyncThunk(
 export const getReactedVents = createAsyncThunk(
   "vent/getReactedVents",
   async ({ page, userId }, { dispatch }) => {
+    page === 1 && dispatch(ventSlice.actions.setPostsNull());
+    dispatch(ventSlice.actions.setDonefetching(false));
+
     try {
       const {
         data: { data },
@@ -143,7 +173,7 @@ export const getReactedVents = createAsyncThunk(
       } else {
         dispatch(ventSlice.actions.setPostsPerPage(data));
       }
-      return data;
+      if (data.length === 0) dispatch(ventSlice.actions.setDonefetching(true));
     } catch (error) {
       console.log(error);
     }
@@ -156,7 +186,6 @@ export const reactToVent = createAsyncThunk(
       const {
         data: { data },
       } = await reactToSingleVent(postId, mood);
-      console.log(data);
       dispatch(ventSlice.actions.setPost(data.vent));
       dispatch(setUserOnly(data.curUser));
       return data;
@@ -179,6 +208,9 @@ export const getVent = createAsyncThunk(
 export const getListeningVents = createAsyncThunk(
   "vent/getListeningVents",
   async (page, { dispatch }) => {
+    page === 1 && dispatch(ventSlice.actions.setPostsNull());
+    dispatch(ventSlice.actions.setDonefetching(false));
+
     try {
       const {
         data: { data },
@@ -188,6 +220,8 @@ export const getListeningVents = createAsyncThunk(
       } else {
         dispatch(ventSlice.actions.setPostsPerPage(data));
       }
+      if (data.length === 0) dispatch(ventSlice.actions.setDonefetching(true));
+
       return data;
     } catch (error) {
       console.log(error);
@@ -196,12 +230,22 @@ export const getListeningVents = createAsyncThunk(
 );
 export const createSingleVent = createAsyncThunk(
   "vent/createSingleVent",
-  async (body, { dispatch }) => {
+  async ({ formData, handleClose, setError }, { dispatch }) => {
     try {
       const {
         data: { data },
-      } = await createVent(body);
+      } = await createVent(formData);
+      console.log("please", data);
       dispatch(ventSlice.actions.createPost(data));
+      setError({
+        errState: true,
+        errType: "success",
+        errText: "vent has been created",
+      });
+      setTimeout(() => {
+        handleClose();
+        setError({ errState: false, errType: "", errText: "" });
+      }, 1000);
       return data;
     } catch (error) {
       console.log(error);

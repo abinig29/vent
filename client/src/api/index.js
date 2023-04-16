@@ -4,13 +4,13 @@ let user;
 if (localStorage.getItem("user"))
   user = JSON.parse(localStorage.getItem("user")).user;
 const API = axios.create({
-  baseURL: "https://vent-now.onrender.com/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
 });
 const PHOTOAPI = axios.create({
-  baseURL: "https://vent-now.onrender.com/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
   headers: {
     "Content-Type": "multipart/form-data",
   },

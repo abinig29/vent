@@ -28,22 +28,7 @@ const CreateModal = ({ open, handleClose }) => {
 
     const [error, setError] = useState({ errText: '', errState: false, errType: "" })
 
-    // const [openEmoji, setOpenEmoji] = useState(false)
 
-    const handleEmojiClick = (e) => {
-        setText(pre => pre + e.native)
-        // setOpenEmoji(false)
-    }
-    // _id: id[0],
-    //     userId: "6415a045d7154777b2bc3121",
-    //         userPicturePath:
-    // "https://tse3.mm.bing.net/th?id=OIP.KdBSw8TPL34eU6T7bjhpAAHaLH&pid=Api&P=0",
-    //     userName: "abel",
-    //         ventMood: "tired",
-    //             ventText:
-    // "I need to vent Friends with benefits is good right like its ohkay i want that like no sex buh making out and acting like nothing happened thats what we guys want please girls be like this too like mutual sexual support",
-    //     tags: ["afraied"],
-    //         comment: [],
     const closemodal = () => {
         handleClose()
         setText("")
@@ -51,7 +36,7 @@ const CreateModal = ({ open, handleClose }) => {
         setPicture("")
     }
     const handlePost = async () => {
-        if (text && mood) {
+        if (text) {
             try {
                 const formData = new FormData()
                 formData.append("userId", user._id)
@@ -61,12 +46,8 @@ const CreateModal = ({ open, handleClose }) => {
                 formData.append("ventText", text)
                 formData.append("ventPhoto", picture.name)
                 formData.append("picture", picture)
-                dispatch(createSingleVent(formData))
-                setError({ errState: true, errType: "success", errText: "vent has been created" })
-                setTimeout(() => {
-                    handleClose()
-                    setError({ errState: false, errType: "", errText: "" })
-                }, 3000)
+                dispatch(createSingleVent({ formData, handleClose, setError }))
+                setError({ errState: true, errType: "success", errText: "vent creating..." })
                 setMood("")
                 setText("")
                 setPicture("")
