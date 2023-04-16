@@ -181,12 +181,12 @@ export const getReactedVents = createAsyncThunk(
 );
 export const reactToVent = createAsyncThunk(
   "vent/reactToVent",
-  async ({ postId, mood }, { dispatch }) => {
+  async ({ post, mood, reactedPost }, { dispatch }) => {
+    dispatch(ventSlice.actions.setPost(reactedPost));
     try {
       const {
         data: { data },
-      } = await reactToSingleVent(postId, mood);
-      dispatch(ventSlice.actions.setPost(data.vent));
+      } = await reactToSingleVent(post._id, mood);
       dispatch(setUserOnly(data.curUser));
       return data;
     } catch (error) {}
@@ -230,7 +230,10 @@ export const getListeningVents = createAsyncThunk(
 );
 export const createSingleVent = createAsyncThunk(
   "vent/createSingleVent",
-  async ({ formData, handleClose, setError }, { dispatch }) => {
+  async (
+    { formData, handleClose, setError, setMood, setText, setPicture },
+    { dispatch }
+  ) => {
     try {
       const {
         data: { data },
@@ -242,6 +245,9 @@ export const createSingleVent = createAsyncThunk(
         errType: "success",
         errText: "vent has been created",
       });
+      setMood("");
+      setText("");
+      setPicture("");
       setTimeout(() => {
         handleClose();
         setError({ errState: false, errType: "", errText: "" });

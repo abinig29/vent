@@ -9,18 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 const Post = ({
-    _id,
-    userId,
-    userPicturePath,
-    userName,
-    ventMood,
-    ventText,
-    tags,
-    hug,
-    smile,
-    comment,
-    surprized,
-    createdAt,
+    post,
     savedIcon,
     listenIcon,
     ventPhoto,
@@ -29,11 +18,13 @@ const Post = ({
 }) => {
     const { user } = useSelector(state => state.user)
     const dispacth = useDispatch()
-    const isOurs = user?._id === userId
+    const isOurs = user?._id === post.userId
     const [openModal, setOpenModal] = useState(false)
-    const listen = user?.lisetning.includes(userId)
+    // const listen = user?.lisetning.includes(post.userId)
+    const [listen, setListen] = useState(user?.lisetning.includes(post.userId))
     const handleClick = () => {
-        dispacth(followUnfollowUser(userId))
+        setListen(pre => !pre)
+        dispacth(followUnfollowUser(post.userId))
     }
     const handleSnackClose = (event, reason) => {
         setOpenModal(false);
@@ -55,16 +46,16 @@ const Post = ({
         <Card elevation={2} >
 
             <Stack flexDirection={"row"} p={2} >
-                <Avatar aria-label="recipe" src={`https://vent-now.onrender.com/${userPicturePath}`} />
+                <Avatar aria-label="recipe" src={`https://vent-now.onrender.com/${post.userPicturePath}`} />
 
                 <Stack sx={{ ml: 2 }}>
-                    <Typography variant="body2" color="initial" component={Link} to={`/profile/${userId}`} sx={{
+                    <Typography variant="body2" color="initial" component={Link} to={`/profile/${post.userId}`} sx={{
                         textDecoration: "none", "&:hover": {
                             textDecoration: "underline"
                         }
                     }}>
-                        {`${userName}  is ${ventMood}`} </Typography>
-                    <Typography variant="body2" color="text.secondary">{moment(createdAt).fromNow()} </Typography>
+                        {`${post.userName}  is ${post.ventMood}`} </Typography>
+                    <Typography variant="body2" color="text.secondary">{moment(post.createdAt).fromNow()} </Typography>
                 </Stack>
                 {listenIcon ? !isOurs &&
                     (<><Button sx={{ ml: "auto", bgcolor: "#da254b", "&:hover": { bgcolor: "#da254b" } }} disableElevation onClick={handleClick} variant='contained'>
@@ -72,7 +63,7 @@ const Post = ({
                     </Button>
                         <Snackbar open={openModal} onClose={handleSnackClose}>
                             <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
-                                {listen ? `you are now listning to ${userName}` : `you tuned out ${userName}`}
+                                {listen ? `you are now listning to ${post.userName}` : `you tuned out ${post.userName}`}
                             </Alert>
                         </Snackbar></>
                     ) :
@@ -95,17 +86,17 @@ const Post = ({
                                     'aria-labelledby': 'basic-button',
                                 }}
                             >
-                                    <MenuItem onClick={() => handleRemove(_id)}>Remove from Saved </MenuItem>
+                                    <MenuItem onClick={() => handleRemove(post._id)}>Remove from Saved </MenuItem>
 
                                 </Menu></>}</>
                 }
 
             </Stack>
             {
-                ventPhoto != "undefined" && <CardMedia
+                post.ventPhoto != "undefined" && <CardMedia
                     component="img"
                     height="350"
-                    image={`https://vent-now.onrender.com//${ventPhoto}`}
+                    image={`https://vent-now.onrender.com//${post.ventPhoto}`}
                     alt="Paella dish"
                 />
             }
@@ -113,7 +104,7 @@ const Post = ({
             {/* <CardMedia title="" image="https://tse1.mm.bing.net/th?id=OIP.NbfPECA64xbFnmW58MbWDQHaEo&pid=Api&P=0" /> */}
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                    {ventText}
+                    {post.ventText}
                 </Typography>
             </CardContent>
 
@@ -123,10 +114,12 @@ const Post = ({
                 width={60}
                 comment={true}
                 savedIcon={savedIcon}
-                hug={hug.length}
-                smile={smile.length}
-                surprized={surprized.length}
-                postId={_id} />
+                hug={post.hug.length}
+                smile={post.smile.length}
+                surprized={post.surprized.length}
+                postId={post._id}
+                post={post} />
+
 
 
 

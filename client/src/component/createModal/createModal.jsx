@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-    Modal, Box, Typography, Divider, IconButton, Avatar, TextField, Button, Stack, Grid, Alert, AlertTitle
+    Modal, Box, Typography, Divider, IconButton, Avatar, TextField, Button, Stack, Grid, Alert, AlertTitle, CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Height } from '@mui/icons-material';
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createVent } from '../../api';
 import { createSingleVent } from '../../feature/ventSlice';
 import { openMoodModal, closeMoodModal } from '../../feature/modalSlice';
+import { Send } from "@mui/icons-material"
 
 
 
@@ -46,11 +47,9 @@ const CreateModal = ({ open, handleClose }) => {
                 formData.append("ventText", text)
                 formData.append("ventPhoto", picture.name)
                 formData.append("picture", picture)
-                dispatch(createSingleVent({ formData, handleClose, setError }))
-                setError({ errState: true, errType: "success", errText: "vent creating..." })
-                setMood("")
-                setText("")
-                setPicture("")
+                dispatch(createSingleVent({ formData, handleClose, setError, setMood, setText, setPicture }))
+                setError({ errState: true, errType: "loading", errText: "vent creating..." })
+
             } catch (error) {
 
             }
@@ -91,8 +90,8 @@ const CreateModal = ({ open, handleClose }) => {
                     <Divider />
                     <CustomBox sx={{ mt: 2, justifyContent: "space-between" }}>
                         <CustomBox>
-                            <Avatar src="https://tse1.mm.bing.net/th/id/OIP.mHW53jey0964kxQqcgCj9gHaLH?pid=ImgDet&w=199&h=298&c=7&dpr=1.3" alt='Abel' />
-                            <Typography variant="h6" color="black" ml={2}>Abel Nigus{mood && `  is ${mood}`}</Typography>
+                            <Avatar src={`https://vent-now.onrender.com/${user?.coverPhoto}`} />
+                            <Typography variant="h6" color="black" ml={2}>{user?.userName}{mood && `  is ${mood}`}</Typography>
                         </CustomBox>
                         <Button onClick={() => dispatch(openMoodModal())} variant='contained' sx={{ bgcolor: "#da254b", "&:hover": { bgcolor: "#e35b77" } }} disableElevation >
                             <Typography variant="body1" color="white">Mood</Typography>
@@ -149,7 +148,11 @@ const CreateModal = ({ open, handleClose }) => {
                             send post
                         </Button>
                         {
-                            error.errState && <Alert severity={error.errType} sx={{ mt: 2, width: "100%" }}>
+
+                            error.errState && error.errType === "loading" && <CircularProgress sx={{ mt: 2 }} />
+                        }
+                        {
+                            error.errState && error.errType === "success" && <Alert severity={error.errType} sx={{ mt: 2, width: "100%" }}>
                                 <Typography variant="body2" color="" align='center'>{error.errText}</Typography>
                             </Alert>
                         }

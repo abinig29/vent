@@ -117,12 +117,12 @@ export const saveVent = createAsyncThunk(
 export const removeFromSaved = createAsyncThunk(
   "user/removeFromSaved",
   async (postId, { dispatch }) => {
+    dispatch(setDeleteVent(postId));
     try {
       const {
         data: { data },
       } = await removeSaveThought(postId);
       dispatch(userSlice.actions.setUserOnly(data));
-      dispatch(setDeleteVent(postId));
       return data;
     } catch (error) {}
   }

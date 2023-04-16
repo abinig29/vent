@@ -12,7 +12,8 @@ const ProfileHeader = ({ user }) => {
     const dispatch = useDispatch()
     const { user: curUser } = useSelector(state => state.user)
     let isUserItself = user?._id === curUser?._id
-    const doesListen = curUser?.lisetning.includes(user?._id)
+    // const doesListen = curUser?.lisetning.includes(user?._id)
+    const [doesListen, setDoesListen] = useState(curUser?.lisetning.includes(user?._id))
     const [listnerNumber, setListnerNumber] = useState(user?.listener?.length)
     const [open, setOpen] = React.useState(false);
     const [showReactedVent, setShowReactedVent] = useState(false)
@@ -34,6 +35,7 @@ const ProfileHeader = ({ user }) => {
         })
     }, [user])
     const handleClick = () => {
+        setDoesListen(pre => !pre)
         doesListen ? setListnerNumber(pre => pre - 1) : setListnerNumber(pre => pre + 1)
         dispatch(followUnfollowUser(user?._id))
     }

@@ -42,7 +42,7 @@ const PostWrapper = ({ type }) => {
     return (
 
         < Box >
-            {!isLoading && posts.length ? user._id != displayedUser._id && type === "reactedVent" ? displayedUser.showReactedVents ? < Posts listenIcon={false} savedIcon={true} />
+            {posts.length ? user._id != displayedUser._id && type === "reactedVent" ? displayedUser.showReactedVents ? < Posts listenIcon={false} savedIcon={true} />
                 : <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh" }}>Hidden</Box>
                 : < Posts listenIcon={false} savedIcon={true} />
                 : !isLoading && <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh" }}>no vent for today</Box>

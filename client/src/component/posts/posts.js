@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const Posts = React.memo(({ listenIcon, savedIcon, rmSaveIcon }) => {
   const { posts } = useSelector((state) => state.vent);
-  console.log(posts);
   return (
     <Box
       // bgcolor={"#eceaea"}
@@ -22,47 +21,17 @@ const Posts = React.memo(({ listenIcon, savedIcon, rmSaveIcon }) => {
       flex={1}
     >
       {posts.length ? (
-        posts?.map(
-          ({
-            _id,
-            userId,
-            userPicturePath,
-            userName,
-            ventMood,
-            ventText,
-            tags,
-            feelingSame,
-            hug,
-            smile,
-            surprized,
-            comment,
-            createdAt,
-            ventPhoto,
-          }) => {
-            return (
-              <Post
-                key={_id}
-                _id={_id}
-                userId={userId}
-                userPicturePath={userPicturePath}
-                userName={userName}
-                ventMood={ventMood}
-                ventText={ventText}
-                feelingSame={feelingSame}
-                hug={hug}
-                smile={smile}
-                surprized={surprized}
-                tags={tags}
-                savedIcon={savedIcon}
-                comment={comment}
-                createdAt={createdAt}
-                ventPhoto={ventPhoto}
-                listenIcon={listenIcon}
-                rmSaveIcon={rmSaveIcon}
-              />
-            );
-          }
-        )
+        posts?.map((post) => {
+          return (
+            <Post
+              key={post._id}
+              post={post}
+              savedIcon={savedIcon}
+              listenIcon={listenIcon}
+              rmSaveIcon={rmSaveIcon}
+            />
+          );
+        })
       ) : (
         <Box
           flex={1}
