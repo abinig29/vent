@@ -41,10 +41,11 @@ const Reaction = ({
     const [mood, setMood] = useState(null)
 
     useEffect(() => {
-        if (!user)
-            return navigate("/login")
+
         if (!mood)
             return
+        if (!user)
+            return navigate("/login")
         let moodtype;
         let reactedPost;
         if (mood === "smiled") moodtype = "smile";
