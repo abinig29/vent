@@ -45,7 +45,7 @@ const ProfileHeader = ({ user }) => {
             <Stack width={"60%"} pl={3} gap={1} >
                 <Stack flexDirection={"row"} alignItems={"center"} gap={5} >
                     <Avatar
-                        src={`http://localhost:5000/${user?.coverPhoto}`}
+                        src={`https://vent-now.onrender.com/${user?.coverPhoto}`}
                         sx={{ width: 120, height: 120, }}
                     >
                         <Typography variant="h1" color="#9693a2" >{user?.userName?.slice(0, 1).toUpperCase()}</Typography>

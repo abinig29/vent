@@ -72,7 +72,7 @@ const Home = ({ type }) => {
               </CenterBox>
             )
           )}
-          {isLoading && posts.length && (
+          {isLoading && (
             <Box
               sx={{
                 px: 5,

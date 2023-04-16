@@ -20,7 +20,9 @@ const CreateNav = ({ user }) => {
   return (
     <Card sx={{ px: 4, py: 2, mt: 3 }}>
       <Stack flexDirection={"row"} gap={2} alignItems={"center"}>
-        <Avatar src={`http://localhost:5000/${user?.coverPhoto}`}>r</Avatar>
+        <Avatar
+          src={`https://vent-now.onrender.com/${user?.coverPhoto}`}
+        ></Avatar>
         <Box
           onClick={() => handleOpenModal()}
           sx={{

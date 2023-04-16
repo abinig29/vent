@@ -2,20 +2,26 @@ import styled from '@emotion/styled'
 import { Box, Avatar, Typography, Button, IconButton, Paper, ButtonBase, Skeleton } from '@mui/material'
 import { bgcolor } from '@mui/system'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { GiOldMicrophone } from "react-icons/gi"
 import { IoHeadsetSharp } from "react-icons/io5"
+import { logout } from '../../feature/userSlice'
 
 
 const UserAccount = ({
 }) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { user, isLoading } = useSelector(state => state.user)
     const CustomBox = styled(Box)({
         display: "flex",
 
     })
+    const handleLogout = () => {
+        dispatch(logout())
+        navigate("/login")
+    }
     const CustomTypo = styled(Typography)({
         backdropFilter: "blur(5px)",
         padding: 10,
@@ -37,7 +43,7 @@ const UserAccount = ({
 
                         <CustomBox sx={{ alignItems: "center", }} flex={1} gap={2}>
                             <IconButton aria-label="" onClick={() => navigate(`/profile/${user._id}`)} sx={{ "&:hover": { bgcolor: "transparent" } }}>
-                                <Avatar src={`http://localhost:5000/${user?.coverPhoto}`} />
+                                <Avatar src={`https://vent-now.onrender.com/${user?.coverPhoto}`} />
                             </IconButton>
                             <Typography variant="body1" sx={{ color: "black", textTransform: "capitalize", "&:hover": { textDecoration: "underline", cursor: 'pointer' } }} onClick={() => navigate(`/profile/${user._id}`)}>{user.userName}</Typography>
                             {/* <Typography variant="body1" color="text.secodary">{user.email}</Typography> */}
@@ -47,10 +53,13 @@ const UserAccount = ({
                         <CustomTypo variant="body1" color="text.secodary"><IoHeadsetSharp fontSize={"25px"} color="#da254b" />  {<Typography variant="h6" color="initial">{user.lisetning.length}</Typography>}</CustomTypo>
                         <CustomTypo variant="body1" sx={{ color: "black" }}><GiOldMicrophone fontSize={"25px"} color="#da254b" />  {<Typography variant="h6" color="initial">{user.listener.length}</Typography>}</CustomTypo>
                     </CustomBox>
+                    <Button onClick={handleLogout} variant='contained' sx={{ bgcolor: '#da254b', "&:hover": { background: "#df4263" } }}>
+                        Logout
+                    </Button>
                 </Box>)}
 
             {
-                !user && !isLoading && <Button sx={{ color: "#da254b" }} onClick={() => navigate('/login')}>Login</Button>
+                !user && !isLoading && <Button variant='contained' sx={{ bgcolor: "#da254b", "&:hover": { background: "#df4263" } }} onClick={() => navigate('/login')}>Login</Button>
             }
 
 

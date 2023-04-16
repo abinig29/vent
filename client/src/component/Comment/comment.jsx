@@ -26,7 +26,7 @@ const Comment = ({ comments }) => {
                     (comments.map((comment) => {
                         return (
                             <Box sx={{ display: 'flex', alignItems: "flex-start" }} gap={2}>
-                                <Avatar src={`http://localhost:5000/${comment.userPicturePath}`} sx={{ cursor: "pointer" }} />
+                                <Avatar src={`https://vent-now.onrender.com/${comment.userPicturePath}`} sx={{ cursor: "pointer" }} />
                                 <Box sx={{ display: 'flex', flexDirection: "column" }} >
                                     <Typography onClick={() => handleClick(comment.userId)} fontWeight={600} variant="v6" color="black" sx={{ cursor: "pointer", "&:hover": { textDecoration: "underline" } }}>{comment.userName}</Typography>
                                     <Typography variant="v6" color="black">{comment.comment}</Typography>

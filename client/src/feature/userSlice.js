@@ -45,6 +45,13 @@ export const userSlice = createSlice({
         JSON.stringify({ user: action.payload, token })
       );
     },
+    logout: (state, action) => {
+      state.user = null;
+      state.Token = null;
+      state.isLoading = false;
+      state.error = false;
+      localStorage.removeItem("user");
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(Signup.pending, (state) => {
@@ -60,7 +67,7 @@ export const Signup = createAsyncThunk(
   async ({ formData, setPageType }, { dispatch }) => {
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/v1/auth/signup",
+        "https://vent-now.onrender.com/api/v1/auth/signup",
         formData,
         {
           headers: {
@@ -145,6 +152,6 @@ export const followUnfollowUser = createAsyncThunk(
   }
 );
 
-export const { setUser, setUserOnly } = userSlice.actions;
+export const { setUser, setUserOnly, logout } = userSlice.actions;
 
 export default userSlice.reducer;

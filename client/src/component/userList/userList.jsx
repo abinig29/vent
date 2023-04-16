@@ -20,7 +20,7 @@ const UserList = ({ height, users, rightIcon }) => {
                     <ListItem disablePadding>
                         <ListItemButton disableTouchRipple onClick={() => navigate(`/profile/${user._id}`)}>
                             <ListItemIcon>
-                                <Avatar src={`http://localhost:5000/${user.coverPhoto}`} alt={user.userName}>
+                                <Avatar src={`https://vent-now.onrender.com/${user.coverPhoto}`} alt={user.userName}>
                                 </Avatar>
                             </ListItemIcon>
                             <ListItemText

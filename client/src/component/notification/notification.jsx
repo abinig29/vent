@@ -21,7 +21,7 @@ const EachNotification = () => {
                     return <Paper sx={{ bgcolor: "white", display: "flex", alignItems: "center", gap: 4, px: 6, py: 4, cursor: "pointer", "&:hover": { background: '#dee0df' } }} onClick={() => handleClick(eachNotification.ventId)}>
                         <AiOutlineNotification fontSize={40} color='#da254b' />
                         <Box>
-                            <Avatar src={`http://localhost:5000/${eachNotification.senderPhoto}`} />
+                            <Avatar src={`https://vent-now.onrender.com/${eachNotification.senderPhoto}`} />
                             <Typography fontWeight={700} fontSize={18} textTransform={"capitalize"} variant="h6" color="black">{eachNotification.senderUserName}</Typography>
                             {
                                 eachNotification.notificationType === "reacted" && (<Typography fontWeight={600}>

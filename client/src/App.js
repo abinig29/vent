@@ -12,12 +12,10 @@ import {
 import Home from "./pages/home/home.js";
 import VentDetail from "./pages/ventDetail/ventDetail.js";
 import Profile from "./pages/profile/profile.jsx";
-import Message from "./pages/message/message.jsx";
 import Notification from "./pages/notification/notification.js";
 import Saved from "./pages/saved/saved.js";
 import Layout from "./component/layout/index.js";
 import HomeLayout from "./component/layout/homeLaytout.js";
-import Posts from "./component/posts/posts.js";
 import LoginPage from "./component/login/index.jsx";
 import PostWrapper from "./pages/profile/PostWrapper.jsx";
 import { getNotification } from "./feature/notification.js";
@@ -58,7 +56,6 @@ const App = () => {
               <Route element={<Home type="listning" />} path="listning" />
             </Route>
             <Route path="vent/:id" element={<VentDetail />} />
-            <Route path="message" element={<Message />} />
             <Route path="notification" element={<Notification />} />
             <Route path="saved" element={<Saved />} />
             <Route path="profile/:id" element={<Profile />}>

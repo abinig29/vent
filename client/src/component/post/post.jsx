@@ -55,7 +55,7 @@ const Post = ({
         <Card elevation={2} >
 
             <Stack flexDirection={"row"} p={2} >
-                <Avatar aria-label="recipe" src={`http://localhost:5000/${userPicturePath}`} />
+                <Avatar aria-label="recipe" src={`https://vent-now.onrender.com/${userPicturePath}`} />
 
                 <Stack sx={{ ml: 2 }}>
                     <Typography variant="body2" color="initial" component={Link} to={`/profile/${userId}`} sx={{
@@ -105,7 +105,7 @@ const Post = ({
                 ventPhoto != "undefined" && <CardMedia
                     component="img"
                     height="350"
-                    image={`http://localhost:5000/${ventPhoto}`}
+                    image={`https://vent-now.onrender.com//${ventPhoto}`}
                     alt="Paella dish"
                 />
             }
