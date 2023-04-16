@@ -29,20 +29,6 @@ const Home = ({ type }) => {
   const dispatch = useDispatch();
   // page realted
   const { page } = useInfinite(type);
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       const {
-  //         data: { data },
-  //       } = await getUserList(user?._id);
-  //       setLoading(false);
-  //       setUsers(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetch();
-  // }, [user]);
 
   useEffect(() => {
     if (type === "all") {
@@ -86,7 +72,7 @@ const Home = ({ type }) => {
               </CenterBox>
             )
           )}
-          {isLoading && (
+          {isLoading && posts.length && (
             <Box
               sx={{
                 px: 5,

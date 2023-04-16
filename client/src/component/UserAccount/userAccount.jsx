@@ -28,7 +28,7 @@ const UserAccount = ({
     })
 
     return (
-        <Paper sx={{ borderRadius: 2, }} elevation={2}>
+        <Paper sx={{ borderRadius: 2, p: 2 }} elevation={2}>
             {user &&
 
                 (<Box p={2}>
@@ -50,7 +50,7 @@ const UserAccount = ({
                 </Box>)}
 
             {
-                !user && !isLoading && <Button>Login</Button>
+                !user && !isLoading && <Button sx={{ color: "#da254b" }} onClick={() => navigate('/login')}>Login</Button>
             }
 
 

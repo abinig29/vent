@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 const Posts = React.memo(({ listenIcon, savedIcon, rmSaveIcon }) => {
   const { posts } = useSelector((state) => state.vent);
+  console.log(posts);
   return (
     <Box
       // bgcolor={"#eceaea"}
@@ -21,7 +22,7 @@ const Posts = React.memo(({ listenIcon, savedIcon, rmSaveIcon }) => {
       flex={1}
     >
       {posts.length ? (
-        posts.map(
+        posts?.map(
           ({
             _id,
             userId,

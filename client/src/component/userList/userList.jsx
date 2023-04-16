@@ -14,7 +14,7 @@ const UserList = ({ height, users, rightIcon }) => {
                 display: "none"
             }
         }}>
-            {users.map((user) => {
+            {users?.map((user) => {
 
                 return (
                     <ListItem disablePadding>

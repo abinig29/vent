@@ -59,23 +59,23 @@ const Form = () => {
                 formData.append(value, values[value])
             }
             formData.append("coverPhoto", values.picture.name);
-            dispatch(Signup(formData))
+            dispatch(Signup({ formData, setPageType }))
         }
         else {
-            dispatch(Login(values))
+            dispatch(Login({ values, navigate }))
         }
         onSubmitProps.resetForm();
     };
-    useEffect(() => {
-        if (isRegister) {
-            if (!error && !isLoading) setPageType("login")
-        }
-        else if (isLogin) {
-            if (!error && !isLoading)
-                navigate("/home")
-        }
+    // useEffect(() => {
+    //     if (isRegister) {
+    //         if (!error && !isLoading) setPageType("login")
+    //     }
+    //     else if (isLogin) {
+    //         if (!error && !isLoading)
+    //             navigate("/home")
+    //     }
 
-    }, [error, isLoading])
+    // }, [error, isLoading])
 
     return (
         <Formik

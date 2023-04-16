@@ -14,7 +14,7 @@ import { setDeleteVent } from "./ventSlice";
 const initialState = {
   user: null,
   Token: null,
-  isLoading: true,
+  isLoading: false,
   error: false,
 };
 
@@ -57,11 +57,11 @@ export const userSlice = createSlice({
 });
 export const Signup = createAsyncThunk(
   "user/Sigup",
-  async (userInfo, { dispatch }) => {
+  async ({ formData, setPageType }, { dispatch }) => {
     try {
       const { data } = await axios.post(
         "http://localhost:5000/api/v1/auth/signup",
-        userInfo,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -69,6 +69,7 @@ export const Signup = createAsyncThunk(
         }
       );
       dispatch(userSlice.actions.setSucess());
+      setPageType("login");
       return data;
     } catch (error) {
       dispatch(userSlice.actions.setError());
@@ -77,17 +78,17 @@ export const Signup = createAsyncThunk(
 );
 export const Login = createAsyncThunk(
   "user/Login",
-  async (userInfo, { dispatch }) => {
+  async ({ values: userInfo, navigate }, { dispatch }) => {
     try {
       const {
         data: { data },
       } = await login(userInfo);
-      console.log(data);
       localStorage.setItem(
         "user",
         JSON.stringify({ user: data.user, token: data.token })
       );
       dispatch(userSlice.actions.setUser(data));
+      navigate("/home");
       return data;
     } catch (error) {
       dispatch(userSlice.actions.setError());

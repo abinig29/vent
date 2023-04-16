@@ -50,7 +50,7 @@ const App = () => {
       <Router>
         <ScrollToTop />
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route exact path="/login" element={<LoginPage />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/home" />} />
             <Route path="home" element={<HomeLayout />}>
