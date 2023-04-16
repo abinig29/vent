@@ -1,6 +1,6 @@
 import { Stack } from '@mui/system'
 import { Box, Typography, IconButton, Snackbar, Alert, Divider } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Comment, PushPin } from "@mui/icons-material"
 import { BiBookmarkHeart } from "react-icons/bi"
 import { FaCommentDots, FaRegMeh } from "react-icons/fa"
@@ -21,6 +21,7 @@ const Reaction = ({
     smile,
     surprized,
     postId,
+    post,
     comment,
     savedIcon }) => {
 
@@ -37,6 +38,34 @@ const Reaction = ({
     })
     // const save = user?.savedThoughts.includes(postId)
     const [test, setTest] = useState(user?.savedThoughts.includes(postId))
+    const [mood, setMood] = useState(null)
+
+    useEffect(() => {
+        if (!user)
+            return navigate("/login")
+        if (!mood)
+            return
+        let moodtype;
+        let reactedPost;
+        if (mood === "smiled") moodtype = "smile";
+        if (mood === "huged") moodtype = "hug";
+        if (mood === "surprised") moodtype = "surprized";
+        if (post[moodtype].includes(user._id)) {
+            const reactedArray = post[moodtype].filter(userid => userid != user._id)
+            reactedPost = {
+                ...post,
+                [moodtype]: reactedArray,
+            };
+        } else {
+            const reactedArray = [...post[moodtype], user._id]
+            reactedPost = {
+                ...post,
+                [moodtype]: reactedArray,
+            };
+        }
+        if (mood)
+            dispacth(reactToVent({ post, mood, reactedPost }))
+    }, [mood])
 
     const [reactionNumber, setReactionNumber] = React.useState({
         smiled: smile,
@@ -45,23 +74,8 @@ const Reaction = ({
 
     })
     const handleReaction = (mood) => {
-        if (!user)
-            return navigate("/login")
 
-        dispacth(reactToVent({ postId, mood }))
-        setReaction((pre) => {
-            return { ...pre, [mood]: !pre[mood] }
-        })
-        if (reaction[mood]) {
-            setReactionNumber(pre => {
-                return { ...pre, [mood]: pre[mood] - 1 }
-            })
-        }
-        else {
-            setReactionNumber(pre => {
-                return { ...pre, [mood]: pre[mood] + 1 }
-            })
-        }
+        setMood(mood)
     }
 
     const StyledBox = styled(Box)({

@@ -15,10 +15,12 @@ import { getSavedvent } from "../../feature/ventSlice";
 import axios from "axios";
 import UserListSkeleton from "../../component/skeleton/userListSkeleton";
 import UserList from "../../component/userList/userList";
+import SkeletonLoader from "../../component/skeleton/homeSkeleton";
 
 const Saved = () => {
   const dispatch = useDispatch();
   const { page } = useInfinite(null);
+  const { posts, isLoading } = useSelector((state) => state.vent);
   useEffect(() => {
     dispatch(getSavedvent(page));
   }, [page]);
@@ -33,7 +35,26 @@ const Saved = () => {
       }}
     >
       <Box flex={"1.5"} px={10}>
-        <Posts savedIcon={true} rmSaveIcon={true} />
+        {!isLoading && <Posts savedIcon={true} rmSaveIcon={true} />}
+        {!isLoading && posts.length && (
+          <Typography variant="body2" color="initial">
+            no vent
+          </Typography>
+        )}
+        {isLoading && (
+          <Box
+            sx={{
+              px: 5,
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              mt: 3,
+            }}
+          >
+            <SkeletonLoader />
+            <SkeletonLoader />
+          </Box>
+        )}
       </Box>
       <Box flex={1} pt={3} pr={5}>
         <Box sx={{ border: "1px solid black" }}>
