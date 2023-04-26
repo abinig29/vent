@@ -6,11 +6,14 @@ import { RiEmotionSadFill } from "react-icons/ri";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal, openMoodAndModal } from "../../feature/modalSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const CreateNav = ({ user }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleOpenModal = () => {
-    dispatch(openModal());
+    !user && navigate("/login");
+    user && dispatch(openModal());
   };
   const CustomBox = styled(Box)({
     display: "flex",

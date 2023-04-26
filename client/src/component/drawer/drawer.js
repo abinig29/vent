@@ -42,7 +42,8 @@ const SideDrawer = () => {
     dispatch(closeModal());
   };
   const handleOpenModal = () => {
-    dispatch(openModal());
+    !user && navigate("/login");
+    user && dispatch(openModal());
   };
   const list = [
     {
@@ -168,7 +169,11 @@ const SideDrawer = () => {
                   width: 3,
                 }}
                 onClick={() => {
-                  navigate(part.location);
+                  user && navigate(part.location);
+                  if (!user) {
+                    if (part.location === "/home") navigate("/home");
+                    else navigate("/login");
+                  }
                 }}
               >
                 <ListItemIcon>

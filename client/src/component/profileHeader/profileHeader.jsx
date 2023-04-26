@@ -24,11 +24,11 @@ const ProfileHeader = ({ user }) => {
         setOpen(false)
     }
     const handleShow = (e) => {
-        console.log(isUserItself)
         dispatch(editUser({ body: { showReactedVents: !showReactedVent }, userId: curUser._id }))
         setShowReactedVent(e.target.checked)
     }
     useEffect(() => {
+        setDoesListen(curUser?.lisetning.includes(user?._id))
         setListnerNumber(user?.listener?.length)
         setShowReactedVent((pre) => {
             return user?.showReactedVents

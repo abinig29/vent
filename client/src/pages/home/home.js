@@ -16,18 +16,11 @@ import { useFetch } from "../../customHook/useFetch";
 
 const Home = ({ type }) => {
   const { posts, isLoading, doneFetching } = useSelector((state) => state.vent);
-  //create modal
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  // user we are curently listning to
   const { user } = useSelector((state) => state.user);
-  // const [users, setUsers] = useState([]);
-  // const [loading, setLoading] = useState(true);
   const { data: users, loading } = useFetch(getUserList, user?._id, [user]);
 
   const dispatch = useDispatch();
-  // page realted
   const { page } = useInfinite(type);
 
   useEffect(() => {

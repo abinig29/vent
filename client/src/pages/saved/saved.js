@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CardContent,
-  Card,
-  Typography,
-  Paper,
-  Divider,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Posts from "../../component/posts/posts";
-import { vent } from "../../data";
 import { useDispatch, useSelector } from "react-redux";
 import { useInfinite } from "../../customHook/useInfinite";
 import { getSavedvent } from "../../feature/ventSlice";
-import axios from "axios";
-import UserListSkeleton from "../../component/skeleton/userListSkeleton";
-import UserList from "../../component/userList/userList";
+
 import SkeletonLoader from "../../component/skeleton/homeSkeleton";
 
 const Saved = () => {
   const dispatch = useDispatch();
   const { page } = useInfinite(null);
-  const { posts, isLoading } = useSelector((state) => state.vent);
+  const { posts, isLoading, doneFetching } = useSelector((state) => state.vent);
   useEffect(() => {
-    dispatch(getSavedvent(page));
+    !doneFetching && dispatch(getSavedvent(page));
   }, [page]);
 
   return (
@@ -35,8 +25,8 @@ const Saved = () => {
       }}
     >
       <Box flex={"1.5"} px={10}>
-        {!isLoading && <Posts savedIcon={true} rmSaveIcon={true} />}
-        {!isLoading && posts.length && (
+        {!isLoading && <Posts rmSaveIcon={true} />}
+        {!isLoading && !posts.length && (
           <Typography variant="body2" color="initial">
             no vent
           </Typography>
