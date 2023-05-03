@@ -118,7 +118,7 @@ const VentDetail = () => {
                   <Box sx={{ overflow: "hidden" }}>
                     <img
                       style={{ maxWidth: "100%" }}
-                      src={`http://localhost:5000/${post?.ventPhoto}`}
+                      src={`https://vent-now.onrender.com/${post?.ventPhoto}`}
                       alt=""
                     />
                   </Box>
@@ -144,7 +144,7 @@ const VentDetail = () => {
                   flex={1}
                 >
                   <Avatar
-                    src={`http://localhost:5000/${post.userPicturePath}`}
+                    src={`https://vent-now.onrender.com/${post?.userPicturePath}`}
                   ></Avatar>
                   <Typography variant="body2" color="text.secondary">
                     {post.userName}

@@ -38,7 +38,7 @@ const Profile = () => {
   // }, [user, location]);
 
 
-  return <Box width={"100%"} bgcolor="#f3f6f8" sx={{ minHeight: '100vh' }}>
+  return <Box  width={"100%"} bgcolor="#f3f6f8" sx={{ minHeight: '100vh' }}>
     <ProfileHeader user={displayedUser} />
     <Box sx={{ width: '100%', position: "sticky", top: "0px", pl: 7, bgcolor: "#f3f6f8", zIndex: "5" }} >
       <Tabs

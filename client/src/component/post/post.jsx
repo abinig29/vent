@@ -96,7 +96,7 @@ const Post = ({
                 post.ventPhoto != "undefined" && <CardMedia
                     component="img"
                     height="350"
-                    image={`https://vent-now.onrender.com//${post.ventPhoto}`}
+                    image={`https://vent-now.onrender.com/${post.ventPhoto}`}
                     alt="Paella dish"
                 />
             }
