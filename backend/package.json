@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app",
-    "build": "npm i",
+    "start": "node init && node app.js",
+    "dev": "node init && nodemon app",
+    "build": "node init && npm i",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
